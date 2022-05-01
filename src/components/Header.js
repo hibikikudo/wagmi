@@ -69,10 +69,7 @@ const Header = () => {
                     </Grid>
                     <Grid item>
                         <ConnectWalletButton />
-                        {/* <Button className={classes.customButton}>
-                            <Typography>ConnectWallet</Typography>
-                        </Button> */}
-                        </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
         </Toolbar>
