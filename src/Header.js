@@ -1,6 +1,9 @@
 import React from 'react';
 import { AppBar, Toolbar, Box, Button, Typography, Grid } from '@material-ui/core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDiscord, faTwitter } from '@fortawesome/free-brands-svg-icons';
 const pages = ['Products', 'Pricing', 'Blog'];
+const iconStyle = { fontSize: 25 };
 const Header = () => {
     return <>
     <Box sx={{ flexGrow: 1 }}>
@@ -15,8 +18,8 @@ const Header = () => {
                 <Grid item xs={10} container justifyContent="flex-end">
                     <Grid item><Button color="inherit">Home</Button></Grid>
                     <Grid item><Button color="inherit">Mint</Button></Grid>
-                    <Grid item><Button color="inherit">Twitter</Button></Grid>
-                    <Grid item><Button color="inherit">Discord</Button></Grid>
+                    <Grid item><Button color="inherit"><FontAwesomeIcon style={iconStyle} icon={faTwitter} /></Button></Grid>
+                    <Grid item><Button color="inherit"><FontAwesomeIcon style={iconStyle} icon={faDiscord} /></Button></Grid>
                     <Grid item><Button color="inherit">Connect Wallet</Button></Grid>
                 </Grid>
             </Grid>
