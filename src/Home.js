@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import { Grid, Paper } from "@material-ui/core";
 
 const Home = () => {
     return <>
