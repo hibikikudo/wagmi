@@ -2,7 +2,7 @@ import React from 'react';
 import { AppBar, Toolbar, Box, Button, Typography, Grid, makeStyles } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiscord, faTwitter } from '@fortawesome/free-brands-svg-icons';
-import { Link } from 'react-router-dom';
+import ConnectWalletButton from '../moralis/ConnectWalletButton';
 import { Path } from './Routes';
 
 const pages = ['Products', 'Pricing', 'Blog'];
@@ -67,7 +67,12 @@ const Header = () => {
                             <FontAwesomeIcon className={classes.icon} icon={faDiscord} />
                         </Button>
                     </Grid>
-                    <Grid item><Button className={classes.customButton}><Typography>ConnectWallet</Typography></Button></Grid>
+                    <Grid item>
+                        <ConnectWalletButton />
+                        {/* <Button className={classes.customButton}>
+                            <Typography>ConnectWallet</Typography>
+                        </Button> */}
+                        </Grid>
                 </Grid>
             </Grid>
         </Toolbar>

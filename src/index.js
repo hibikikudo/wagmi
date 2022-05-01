@@ -4,11 +4,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import "@fontsource/press-start-2p";
 import './index.css';
+import { MoralisProvider } from 'react-moralis';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <MoralisProvider serverUrl="https://gtardawzorz6.usemoralis.com:2053/server" appId="4daiWxhP3R8fbsO6pFTOkUEu4W1fVGA8Uwf4nQcJ">
+      <App />
+    </MoralisProvider>
   </React.StrictMode>
 );
 
