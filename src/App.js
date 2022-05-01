@@ -1,6 +1,7 @@
 import { ThemeProvider } from "@material-ui/core";
-import Header from "./Header";
-import Home from "./Home";
+import Header from "./components/Header";
+import Home from "./pages/HomePage";
+import MyRoutes from "./components/Routes";
 import theme from "./Theme";
 
 const App = () => {
@@ -12,8 +13,8 @@ const App = () => {
         backgroundImage: `url("https://storage.googleapis.com/studio-design-asset-files/projects/xmaZZplJaR/s-178x157_webp_e1ceac5a-b338-4a18-8f2c-fbf9490beb35.png")`,
         minHeight:'100vh'
         }}>
-        <Header />
-        <Home />
+          <Header />
+          <MyRoutes />
         </div>
       </ThemeProvider>
     </>

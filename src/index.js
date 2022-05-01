@@ -4,7 +4,6 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import "@fontsource/press-start-2p";
 import './index.css';
-// import './wagmi.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
