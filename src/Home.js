@@ -1,16 +1,15 @@
-import { Grid, Paper } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 
 const Home = () => {
     return <>
-        <Grid container>
-            <Grid item xs={2}>
-                a
-            </Grid>
+        <Grid container justifyContent="center">
             <Grid item xs={8}>
-                b
-            </Grid>
-            <Grid item xs={2}>
-                c
+                <Typography>
+                New Single will be released soon ...
+                </Typography>
+                <Typography>
+                30:12:03:35
+                </Typography>
             </Grid>
         </Grid>
     </>;
