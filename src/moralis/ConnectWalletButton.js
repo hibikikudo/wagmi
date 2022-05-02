@@ -1,22 +1,22 @@
 import { useEffect } from "react";
 import { useMoralis } from "react-moralis";
+import { getEllipsisTxt } from "../helpers/formatters";
+import { useState } from "react";
 import { Button } from "@material-ui/core";
 
 const ConnectWalletButton = () => {
-    const { authenticate, isAuthenticated, isAuthenticating, user, account, logout } = useMoralis();
+    const { authenticate, isAuthenticated, isAuthenticating, account, logout } = useMoralis();
+    const [address, setAddress] = useState();
 
     useEffect(() => {
-    if (isAuthenticated) {
-      // add your logic here
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated]);
+      setAddress((isAuthenticated && account));
+    }, [account, isAuthenticated]);
 
   const login = async () => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated || !account) {
 
       await authenticate({signingMessage: "Log in using Moralis" })
-        .then(function (user) {
+        .then((user) => {
           console.log("logged in user:", user);
           if (user) {
             console.log(user.get("ethAddress"));
@@ -36,8 +36,8 @@ const ConnectWalletButton = () => {
   }
   return (
     <div>
-      {isAuthenticated ? 
-      <Button onClick={logOut} disabled={isAuthenticating}>Logout</Button>
+      {isAuthenticated && account ? 
+      <Button onClick={logOut} disabled={isAuthenticating}>{getEllipsisTxt(account, 3)}</Button>
       : <Button onClick={login}>ConnectWallet</Button>}
     </div>
   );
