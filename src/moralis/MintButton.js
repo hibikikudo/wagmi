@@ -5,7 +5,7 @@ import { useWeb3ExecuteFunction } from "react-moralis"
 const MintButton = () => {
 
   const { data, error, fetch, isFetching, isLoading } = useWeb3ExecuteFunction({
-    contractAddress:"0x76a30eCa8461DAd85793535A273ebe2aC552B369",
+    contractAddress:"0x64B4B8AD8AB87F988d0FE67c38aFE1acd61B9348",
     functionName:"mint",
     abi:[{"inputs":[{"internalType":"uint256","name":"_tokenId","type":"uint256"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"mint","outputs":[],"stateMutability":"nonpayable","type":"function"}],
     params:{

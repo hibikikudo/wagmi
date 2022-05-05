@@ -1,6 +1,5 @@
 import { Grid, Typography } from "@material-ui/core";
 import  EventListener  from "../moralis/EventListener"
-import  ConnectWalletButton  from "../moralis/ConnectWalletButton"
 import MintButton from "../moralis/MintButton";
 
 const MintPage = () => {
@@ -12,9 +11,6 @@ const MintPage = () => {
                 </Typography>
                 <Grid item>
                     <EventListener/>
-                </Grid>
-                <Grid item>
-                    <MintButton />
                 </Grid>
             </Grid>
         </Grid>
