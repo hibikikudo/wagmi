@@ -5,10 +5,10 @@ import { ethers } from "ethers";
 import { Path } from '../components/Routes';
 import { useEffect, useState } from 'react';
 import { useMoralis } from "react-moralis";
+import MintButton from "../moralis/MintButton";
 
 // const contractAddress = process.env.CONTRACT_ADDRESS
 const contractAddress = "0x64B4B8AD8AB87F988d0FE67c38aFE1acd61B9348"
-
 
 const useStyles = makeStyles({
   icon: {
@@ -43,14 +43,11 @@ const EventListener = () => {
   if(sales && isAuthenticated && account){
     return(
       <Grid item>
-          <Button 
-              href={Path.mint}
-              className={classes.customButton}
-              >
-            Mint
-          </Button>
+          <MintButton/>
       </Grid>
     )
+  }else{
+    return;
   }
 };
 
