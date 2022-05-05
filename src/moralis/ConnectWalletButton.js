@@ -8,9 +8,9 @@ const ConnectWalletButton = () => {
     const { authenticate, isAuthenticated, isAuthenticating, account, logout } = useMoralis();
     const [address, setAddress] = useState();
 
-    useEffect(() => {
-      setAddress((isAuthenticated && account));
-    }, [account, isAuthenticated]);
+  useEffect(() => {
+    setAddress((isAuthenticated && account));
+  }, [account, isAuthenticated]);
 
   const login = async () => {
     if (!isAuthenticated || !account) {

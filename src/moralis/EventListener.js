@@ -4,13 +4,10 @@ import contractAbi from "./abi.json" // add later
 import { ethers } from "ethers";
 import { Path } from '../components/Routes';
 import { useEffect, useState } from 'react';
+import { useMoralis } from "react-moralis";
 
 // const contractAddress = process.env.CONTRACT_ADDRESS
 const contractAddress = "0x64B4B8AD8AB87F988d0FE67c38aFE1acd61B9348"
-const web3Provider = new ethers.providers.Web3Provider(window.ethereum)
-
-const contract = new ethers.Contract(contractAddress, contractAbi, web3Provider);
-const sale_filter = contract.filters.NowOnSale(null);
 
 
 const useStyles = makeStyles({
@@ -26,21 +23,24 @@ const useStyles = makeStyles({
 })
 
 const EventListener = () => {
+  const { isAuthenticated, account } = useMoralis();
   const [sales, setSeles] = useState();
   
   useEffect(() => {
+    if(!window.ethereum) return null;
+    const web3Provider = new ethers.providers.Web3Provider(window.ethereum)
+    const contract = new ethers.Contract(contractAddress, contractAbi, web3Provider);
+    const sale_filter = contract.filters.NowOnSale(null);
     const fetch = async () => {
       const sale_event = await contract.queryFilter(sale_filter);
       setSeles(sale_event[sale_event.length-1].args[0])
-      console.log("NowOnSale", sales);
     }
     fetch();
   });
 
   const classes = useStyles();
 
-  if(sales){
-    console.log("Sales is Started now")
+  if(sales && isAuthenticated && account){
     return(
       <Grid item>
           <Button 
@@ -51,8 +51,6 @@ const EventListener = () => {
           </Button>
       </Grid>
     )
-  }else{
-    console.log("Sales is Supended now");
   }
 };
 
