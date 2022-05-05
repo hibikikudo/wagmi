@@ -25,7 +25,7 @@ const EventListener = () => {
       const sale_event = await contract.queryFilter(sale_filter);
       setSeles(sale_event[sale_event.length-1].args[0])
     }
-    fetch();
+    if(window.ethereum) fetch();
   });
 
   if(sales && isAuthenticated && account){
