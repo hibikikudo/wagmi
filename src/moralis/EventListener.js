@@ -27,6 +27,8 @@ const EventListener = () => {
     }
     if(window.ethereum) fetch();
   });
+  console.log("isAuth",isAuthenticated);
+  console.log("account",account);
 
   if(sales && isAuthenticated && account){
     return(
