@@ -30,6 +30,8 @@ contract ERC721Mock is ERC721{
   mapping(uint256 => uint256) public MINT_PRICE;
   // 実行権限のある執行者
   mapping(address => bool) private _agent;
+  // ホワイトリストの既に請求者
+  mapping(address => bool) public whitelistClaimed;
 
   /*
   * @title supplyCheck
@@ -91,6 +93,7 @@ contract ERC721Mock is ERC721{
   ) public payable supplyCheck(_tokenId) {
     require(msg.value == MINT_PRICE[_tokenId], "value is incorrect");
     require(sales == SaleState.PublicSale, "NFTs are not now on sale");
+    supplyOfEach[_tokenId] = supplyOfEach[_tokenId].add(1);
     _mint(_msgSender(), _tokenId);
   }
 
@@ -107,25 +110,27 @@ contract ERC721Mock is ERC721{
     bytes32[] calldata _merkleProof
   ) public supplyCheck(_tokenId) {
     require(sales == SaleState.Presale, "NFTs are not now on sale");
+    require(!whitelistClaimed[msg.sender], "Address already claimed");
 
     bytes32 leaf = keccak256(abi.encodePacked(msg.sender));
     require(
       MerkleProof.verify(_merkleProof, merkleRoot, leaf),
       "Invalid Merkle Proof."
     );
+    whitelistClaimed[msg.sender] = true;
 
     supplyOfEach[_tokenId] = supplyOfEach[_tokenId].add(1);
     _mint(_msgSender(), _tokenId);
   }
 
   /*
-  * @title mintForAirdrop
+  * @title mintByOwner
   * @notice バルクミント用
   * @param トークンのID
   * @param 送信先
   * @dev 
   */
-  function mintForAirdrop(
+  function mintByOwner(
     uint256[] calldata _tokenIds, 
     address[] calldata _to
   )public onlyCreatorOrAgent supplyCheckBatch(_tokenIds){
@@ -148,7 +153,7 @@ contract ERC721Mock is ERC721{
   * @title withdraw
   * @notice 資金の引き出し
   * @param 引き出し先のアドレス
-  * @dev 
+  * @dev 収益を分配する場合はこの関数を消去してRevenuePoolを継承
   */
   function withdraw(address _recipient) public onlyCreatorOrAgent {
     payable(_recipient).transfer(address(this).balance);
