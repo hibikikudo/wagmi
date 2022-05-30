@@ -4,8 +4,13 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
+import "../interface/IERC1155Mock.sol";
 
-contract ERC1155Mock is ERC1155{
+/* mandatory parameter
+*  1. name 
+*  2. symbol 
+*/ 
+contract ERC1155Mock is ERC1155, IERC1155Mock{
     using SafeMath for uint256;
 
     // マークルルート
@@ -36,14 +41,19 @@ contract ERC1155Mock is ERC1155{
     // ホワイトリストの既請求者
     mapping(address => bool) public whitelistClaimed;
 
+    event NowOnSale(SaleState sales);
+    event Withdraw(address indexed recipient, uint amount);
+
     constructor(
         string memory name_,
         string memory symbol_
     )ERC1155(_uri){
         _MAX_AMOUNT_OF_MINT[0] = 100;
         MINT_PRICE[0] = 0.05 ether;
-        WL_MINT_PRICE[0] = 0.05 ether;
+        WL_MINT_PRICE[0] = 0.01 ether;
         sales = SaleState.Suspended;
+        _name = name_;
+        _symbol = symbol_;
         _creator = msg.sender;
     }
 
@@ -100,7 +110,7 @@ contract ERC1155Mock is ERC1155{
     function mint(
         uint256 _tokenId,
         uint256 _amount
-    ) public payable supplyCheck(_tokenId, _amount) {
+    ) public payable virtual override supplyCheck(_tokenId, _amount) {
         require(msg.value == MINT_PRICE[_tokenId] * _amount, "value is incorrect");
         require(sales == SaleState.PublicSale, "NFTs are not now on sale");
         supplyOfEach[_tokenId] += _amount;
@@ -120,7 +130,7 @@ contract ERC1155Mock is ERC1155{
         uint256 _tokenId,
         uint256 _amount,
         bytes32[] calldata _merkleProof
-    ) public payable supplyCheck(_tokenId, _amount) {
+    ) public payable virtual override supplyCheck(_tokenId, _amount) {
         require(msg.value == WL_MINT_PRICE[_tokenId] * _amount, "value is incorrect");
         require(sales == SaleState.Presale, "NFTs are not now on sale");
         require(!whitelistClaimed[msg.sender], "Address already claimed");
@@ -148,7 +158,7 @@ contract ERC1155Mock is ERC1155{
         uint256[] calldata _tokenIds, 
         uint256[] calldata _amounts,
         address[] calldata _to
-    )public onlyCreatorOrAgent supplyCheckBatch(_tokenIds, _amounts){
+    )public virtual override onlyCreatorOrAgent supplyCheckBatch(_tokenIds, _amounts){
         for(uint256 i = 0; i < _tokenIds.length; i++){
         supplyOfEach[_tokenIds[i]] = supplyOfEach[_tokenIds[i]].add(1);
         _mint(_to[i], _tokenIds[i]);
@@ -160,7 +170,7 @@ contract ERC1155Mock is ERC1155{
     * @notice マークルルートの設定
     * @dev ホワイトリスト用
     */
-    function setMerkleRoot(bytes32 _merkleRoot) public onlyCreatorOrAgent {
+    function setMerkleRoot(bytes32 _merkleRoot) public virtual override onlyCreatorOrAgent {
         merkleRoot = _merkleRoot;
     }
 
@@ -170,8 +180,9 @@ contract ERC1155Mock is ERC1155{
     * @param 引き出し先のアドレス
     * @dev 収益を分配する場合はこの関数を消去してRevenuePoolを継承
     */
-    function withdraw(address _recipient) public onlyCreatorOrAgent {
+    function withdraw(address _recipient) public virtual override onlyCreatorOrAgent {
         payable(_recipient).transfer(address(this).balance);
+        emit Withdraw(_recipient, address(this).balance);
     }
 
     /*
@@ -179,8 +190,9 @@ contract ERC1155Mock is ERC1155{
     * @notice プレセールの開始
     * @dev 列挙型で管理
     */
-    function startPresale() public onlyCreatorOrAgent {
+    function startPresale() public virtual override onlyCreatorOrAgent {
         sales = SaleState.Presale;
+        emit NowOnSale(sales);
     }
 
     /*
@@ -188,8 +200,9 @@ contract ERC1155Mock is ERC1155{
     * @notice パブリックセールの開始
     * @dev 列挙型で管理
     */
-    function startPublicSale() public onlyCreatorOrAgent {
+    function startPublicSale() public virtual override onlyCreatorOrAgent {
         sales = SaleState.PublicSale;
+        emit NowOnSale(sales);
     }
 
     /*
@@ -197,8 +210,9 @@ contract ERC1155Mock is ERC1155{
     * @notice セール状態の停止
     * @dev 列挙型で管理
     */
-    function suspendSale() public onlyCreatorOrAgent {
+    function suspendSale() public virtual override onlyCreatorOrAgent {
         sales = SaleState.Suspended;
+        emit NowOnSale(sales);
     }
 
     /*
@@ -207,7 +221,7 @@ contract ERC1155Mock is ERC1155{
     * @param エージェントのアドレス
     * @dev 
     */
-    function license(address agentAddr) public onlyCreatorOrAgent {
+    function license(address agentAddr) public virtual override onlyCreatorOrAgent {
         _agent[agentAddr] = true;
     }
 
@@ -217,7 +231,7 @@ contract ERC1155Mock is ERC1155{
     * @param エージェントのアドレス
     * @dev 
     */
-    function unlicense(address agentAddr) public onlyCreatorOrAgent {
+    function unlicense(address agentAddr) public virtual override onlyCreatorOrAgent {
         _agent[agentAddr] = false;
     }
 
@@ -229,7 +243,7 @@ contract ERC1155Mock is ERC1155{
     */
     function EMGReveal(
         string memory _EMGuri
-    ) public onlyCreatorOrAgent {
+    ) public virtual override onlyCreatorOrAgent {
         _setURI(_EMGuri);
     }
     
@@ -239,7 +253,7 @@ contract ERC1155Mock is ERC1155{
     * @return _name コントラクト名
     * @dev OpenSeaに表示するための技術要件
     */
-    function name() public view{
+    function name() public view virtual override returns(string memory){
         return(_name);
     }
 
@@ -249,7 +263,7 @@ contract ERC1155Mock is ERC1155{
     * @return _symbol NFT単位
     * @dev OpenSeaに表示するための技術要件
     */
-    function symbol() public view{
+    function symbol() public view virtual override returns(string memory){
         return(_symbol);
     }
 }

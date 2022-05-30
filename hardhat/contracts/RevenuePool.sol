@@ -2,8 +2,9 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "./interface/IRevenuePool.sol";
 
-contract RevenuePool is Ownable{
+contract RevenuePool is Ownable, IRevenuePool{
     uint private totalPayed;
     mapping(address => uint) private _payedToEach;
     mapping(address => uint) public share;
@@ -14,7 +15,7 @@ contract RevenuePool is Ownable{
     * @param ステークホルダーのアドレス
     * @param 収益分配率(百分率)
     */
-    function setShare(address[] calldata _stakeholders, uint[] calldata _share) public onlyOwner {
+    function setShare(address[] calldata _stakeholders, uint[] calldata _share) public virtual override onlyOwner {
         for(uint256 i = 0; i < _stakeholders.length; i++){
             share[_stakeholders[i]] = _share[i];
         }
@@ -31,7 +32,7 @@ contract RevenuePool is Ownable{
     * @devparam _payedToEach 引き出し済みの資産
     * @devparam share 受け取る収益の割合
     */
-    function withdraw(address _recipient, uint _claimed) public {
+    function withdraw(address _recipient, uint _claimed) public virtual override {
         uint _claimable = (share[msg.sender] / 100) * (address(this).balance + totalPayed) - _payedToEach[msg.sender];
         require(_claimed <= _claimable, "Claimed amount is exceeding claimable limit");
         _claimable -= _claimed;
@@ -46,7 +47,7 @@ contract RevenuePool is Ownable{
     * @param 引き出し先のアドレス
     * @param 引き出す資産額
     */
-    function EMGWithdraw(address _recipient, uint _claimed) public onlyOwner {
+    function EMGWithdraw(address _recipient, uint _claimed) public virtual override onlyOwner {
         require(_claimed <= address(this).balance, "Claimed amount is exceeding funding");
         payable(_recipient).transfer(_claimed);
     }
@@ -55,7 +56,7 @@ contract RevenuePool is Ownable{
     * @title claimable
     * @notice 引き出し可能な資産額の確認
     */
-    function claimable() public view returns(uint){
+    function claimable() public view virtual override returns(uint){
         uint _claimable = (share[msg.sender] / 100) * (address(this).balance + totalPayed) - _payedToEach[msg.sender];
         return(_claimable);
     }
