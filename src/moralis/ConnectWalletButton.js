@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Button } from "@material-ui/core";
 
 const ConnectWalletButton = () => {
-    const { authenticate, isAuthenticated, isAuthenticating, account, logout } = useMoralis();
+    const { authenticate, isAuthenticated, isAuthenticating, account, chainId, logout } = useMoralis();
     const [address, setAddress] = useState();
 
   useEffect(() => {
@@ -34,6 +34,7 @@ const ConnectWalletButton = () => {
     await logout();
     console.log("logged out");
   }
+
   return (
     <div>
       {isAuthenticated && account ? 

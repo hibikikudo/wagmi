@@ -5,53 +5,43 @@ import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "../interface/IERC721Mock.sol";
+import "../interface/IERC721Drop.sol";
 
 /* mandatory parameter
 *  1. name 
 *  2. symbol 
 */ 
-contract ERC721Mock is ERC721, IERC721Mock{
+contract ERC721Drop is ERC721, IERC721Drop{
   using SafeMath for uint256;
 
-  // トークンの供給量
-  uint256 public tokenSupply;
   // マークルルート
   bytes32 public merkleRoot;
-  // 供給量の上限
-  uint256 public MAX_AMOUNT_OF_MINT;
-  // ミント価格
-  uint256 public MINT_PRICE;
-  // WL用ミント価格
-  uint256 public WL_MINT_PRICE;
   // コントラクトの作成者
   address private _creator;
   // ベースURI
   string private baseURI_;
   // テストURI
   string private _uri = "ipfs://QmeQAdSCQpTEskc1JYt9QrmR8PCSiGuFJPzCRjjBVWUWq9/metadata/{id}.json";
-
-  // 販売状態(列挙型)
-  enum SaleState {Presale, PublicSale, Suspended} 
-  SaleState sales;
-
+  // 供給量の上限
+  uint256 public MAX_AMOUNT_OF_MINT;
+  // トークンの供給量
+  uint256 public tokenSupply;
+  // 販売状態
+  bool public sales;
   // 実行権限のある執行者
   mapping(address => bool) private _agent;
   // ホワイトリストの既に請求者
   mapping(address => bool) public whitelistClaimed;
 
-  event NowOnSale(SaleState sales);
-  event Withdraw(address indexed recipient, uint amount);
+  event NowOnSale(bool sales);
 
   constructor (
     string memory _name,
     string memory _symbol
   ) ERC721(_name, _symbol){
-    MAX_AMOUNT_OF_MINT[1] = 100;
-    MINT_PRICE = 0.05 ether;
-    WL_MINT_PRICE = 0.01 ether;
-    sales = SaleState.Suspended;
+    MAX_AMOUNT_OF_MINT = 100;
     _creator = msg.sender;
+    sales = false;
   }
 
   /*
@@ -65,22 +55,13 @@ contract ERC721Mock is ERC721, IERC721Mock{
   }
 
   /*
-  * @title mint
-  * @notice 一般的なmint関数
-  * @param トークンID
-  * @dev パブリックセール時に対応
+  * @title isHolder
+  * @notice NFTホルダーであることの確認
+  * @div 
   */
-  function mint(
-    uint256 _tokenId
-  ) public payable virtual override {
-    require(msg.value == MINT_PRICE[_tokenId], "value is incorrect");
-    require(sales == SaleState.PublicSale, "NFTs are not now on sale");
-    require(tokenSupply < MAX_AMOUNT_OF_MINT, "Max supply reached");
-
-    uint _newTokenId = tokenSupply;
-    tokenSupply = tokenSupply.add(1);
-
-    _mint(_msgSender(), _newTokenId);
+  modifier onlyCreatorOrAgent {
+    require(msg.sender == _creator || _agent[msg.sender], "This is not allowed except for _creator or agent");
+    _;
   }
 
   /*
@@ -91,12 +72,11 @@ contract ERC721Mock is ERC721, IERC721Mock{
   * @dev マークルツリーを利用
   * @dev プレセール時に対応
   */
-  function whitelistMint(
+  function whiteListMint(
     uint256 _tokenId,
     bytes32[] calldata _merkleProof
-  ) public payable virtual override {
-    require(msg.value == WL_MINT_PRICE[_tokenId], "value is incorrect");
-    require(sales == SaleState.Presale, "NFTs are not now on sale");
+  ) public virtual override {
+    require(sales == true, "NFTs are not now on sale");
     require(!whitelistClaimed[msg.sender], "Address already claimed");
     require(tokenSupply < MAX_AMOUNT_OF_MINT, "Max supply reached");
 
@@ -114,24 +94,6 @@ contract ERC721Mock is ERC721, IERC721Mock{
   }
 
   /*
-  * @title mintByOwner
-  * @notice バルクミント用
-  * @param 送信先
-  * @dev 
-  */
-  function mintByOwner(
-    address[] calldata _to
-  )public virtual override onlyCreatorOrAgent {
-    require(tokenSupply + _to.length <= MAX_AMOUNT_OF_MINT, "Max supply reached");
-    for(uint256 i = 0; i < _to.length; i++){
-      uint _newTokenId = tokenSupply;
-      tokenSupply = tokenSupply.add(1);
-
-      _mint(_to[i], _newTokenId);
-    }
-  }
-
-  /*
   * @title addMerkleRoot
   * @notice マークルルートの設定
   * @dev ホワイトリスト用
@@ -141,43 +103,20 @@ contract ERC721Mock is ERC721, IERC721Mock{
   }
 
   /*
-  * @title withdraw
-  * @notice 資金の引き出し
-  * @param 引き出し先のアドレス
-  * @dev 収益を分配する場合はこの関数を消去してRevenuePoolを継承
+  * @title startSale
+  * @notice フリーミントの開始
   */
-  function withdraw(address _recipient) public virtual override onlyCreatorOrAgent {
-    payable(_recipient).transfer(address(this).balance);
-    emit Withdraw(_recipient, address(this).balance);
-  }
-
-  /*
-  * @title startPresale
-  * @notice プレセールの開始
-  * @dev 列挙型で管理
-  */
-  function startPresale() public virtual override onlyCreatorOrAgent {
-    sales = SaleState.Presale;
-    emit NowOnSale(sales);
-  }
-
-  /*
-  * @title startPublicSale
-  * @notice パブリックセールの開始
-  * @dev 列挙型で管理
-  */
-  function startPublicSale() public virtual override onlyCreatorOrAgent {
-    sales = SaleState.PublicSale;
+  function startSale() public virtual override onlyCreatorOrAgent {
+    sales = true;
     emit NowOnSale(sales);
   }
 
   /*
   * @title suspendSale
-  * @notice セール状態の停止
-  * @dev 列挙型で管理
+  * @notice フリーミントの停止
   */
   function suspendSale() public virtual override onlyCreatorOrAgent {
-    sales = SaleState.Suspended;
+    sales = false;
     emit NowOnSale(sales);
   }
 

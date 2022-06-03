@@ -6,12 +6,25 @@ import "@fontsource/press-start-2p";
 import './index.css';
 import { MoralisProvider } from 'react-moralis';
 
+const APP_ID = process.env.REACT_APP_MORALIS_APPLICATION_ID;
+const SERVER_URL = process.env.REACT_APP_MORALIS_SERVER_URL;
+
+const Application = () => {
+  if (!APP_ID || !SERVER_URL)
+    throw new Error(
+      "Missing Moralis Application ID or Server URL. Make sure to set your .env file.",
+  );
+  return (
+    <MoralisProvider appId={APP_ID} serverUrl={SERVER_URL}>
+      <App />
+    </MoralisProvider>
+  )
+}
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <MoralisProvider serverUrl="https://gtardawzorz6.usemoralis.com:2053/server" appId="4daiWxhP3R8fbsO6pFTOkUEu4W1fVGA8Uwf4nQcJ">
-      <App />
-    </MoralisProvider>
+    <Application />
   </React.StrictMode>
 );
 
