@@ -114,7 +114,7 @@ contract ERC1155Mock is ERC1155, IERC1155Mock{
         require(msg.value == MINT_PRICE[_tokenId] * _amount, "value is incorrect");
         require(sales == SaleState.PublicSale, "NFTs are not now on sale");
         supplyOfEach[_tokenId] += _amount;
-        _mint(_msgSender(), _tokenId, _amount);
+        _mint(_msgSender(), _tokenId, _amount, "");
     }
 
     /*
@@ -143,7 +143,7 @@ contract ERC1155Mock is ERC1155, IERC1155Mock{
         whitelistClaimed[msg.sender] = true;
 
         supplyOfEach[_tokenId] += _amount;
-        _mint(_msgSender(), _tokenId, _amount);
+        _mint(_msgSender(), _tokenId, _amount, "");
     }
 
     /*
@@ -160,8 +160,8 @@ contract ERC1155Mock is ERC1155, IERC1155Mock{
         address[] calldata _to
     )public virtual override onlyCreatorOrAgent supplyCheckBatch(_tokenIds, _amounts){
         for(uint256 i = 0; i < _tokenIds.length; i++){
-        supplyOfEach[_tokenIds[i]] = supplyOfEach[_tokenIds[i]].add(1);
-        _mint(_to[i], _tokenIds[i]);
+        supplyOfEach[_tokenIds[i]] += _amounts[i];
+        _mint(_to[i], _tokenIds[i], _amounts[i], "");
         }
     }
 

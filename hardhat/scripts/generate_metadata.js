@@ -43,8 +43,8 @@ const saveToDb = async (metaHash) => {
       if (!error && res.statusCode == 200) {
         // moralisのダッシュボードにセーブ
         const FileDatabase = new Moralis.Object("Metadata");
-        FileDatabase.set("BookName", body.name);
-        FileDatabase.set("Description", body.description);
+        FileDatabase.set("name", body.name);
+        FileDatabase.set("description", body.description);
         FileDatabase.set("image", body.image);
         FileDatabase.set("attributes", body.animation_url);
         FileDatabase.set("meta_hash", metaHash);
@@ -62,27 +62,28 @@ const uploadImage = async () => {
     let image_base64, music_base64, ifiletype, mfiletype;
     
     // データをIPFSにアップロード
-    if(fs.existsSync(`./asset/${id}/image.jpg`)){
-      image_base64 = await btoa(fs.readFileSync(`./asset/${id}/image.jpg`));
-      ifiletype = "jpg";
-    } else if(fs.existsSync(`./asset/${id}/animation.gif`)) {
-      image_base64 = await btoa(fs.readFileSync(`./asset/${id}/animation.gif`, (err,data) => {
+    if(fs.existsSync(`./assets/jackets/${id}.jpeg`)){
+      image_base64 = await btoa(fs.readFileSync(`./assets/jackets/${id}.jpeg`));
+      ifiletype = "jpeg";
+    } else if(fs.existsSync(`./asset/jackets/${id}.gif`)) {
+      image_base64 = await btoa(fs.readFileSync(`./assets/jackets/${id}.gif`, (err,data) => {
         console.log(err)
       }));
       ifiletype = "gif";
     }
-    if(fs.existsSync(`./asset/${id}/music.wav`)){
-      music_base64 = await btoa(fs.readFileSync(`./asset/${id}/music.wav`));
-      mfiletype = "wav";
-    } else if(fs.existsSync(`./asset/${id}/music.mp3`)) {
-      music_base64 = await btoa(fs.readFileSync(`./asset/${id}/music.mp3`));
-      mfiletype = "mp3";
-    } else if(fs.existsSync(`./asset/${id}/music.mp4`)) {
-      music_base64 = await btoa(fs.readFileSync(`./asset/${id}/music.mp4`, (err,data) => {
-        console.log(err)
-      }));
+    if(fs.existsSync(`./assets/sounds/sounds.mp3`)){
+      music_base64 = await btoa(fs.readFileSync(`./assets/sounds/sound.mp3`));
       mfiletype = "mp3";
     }
+    // else if(fs.existsSync(`./asset/${id}/music.mp3`)) {
+    //   music_base64 = await btoa(fs.readFileSync(`./asset/${id}/music.mp3`));
+    //   mfiletype = "mp3";
+    // } else if(fs.existsSync(`./asset/${id}/music.mp4`)) {
+    //   music_base64 = await btoa(fs.readFileSync(`./asset/${id}/music.mp4`, (err,data) => {
+    //     console.log(err)
+    //   }));
+    //   mfiletype = "mp3";
+    // }
 
     let image_file = new Moralis.File("image", { base64: `data:image/${ifiletype};base64,${image_base64}` });
     let music_file = new Moralis.File("music", { base64: `data:audio/${mfiletype};base64,${music_base64}` });
@@ -114,11 +115,11 @@ const createMetadata = async () => {
   
     // メタデータを記述
     let metadata = {
-      "name": assetElement[i].name,
-      "description": assetElement[i].description,
+      "name": assetElement.name,
+      "description": assetElement.description,
       "image": imageURL,
       "animation_url": musicURL,
-      "attributes": assetElement[i].attributes
+      "attributes": assetElement.attributes
     }
     metaDataArray.push(metadata);
   

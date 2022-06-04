@@ -5,20 +5,18 @@ interface IERC721Mock {
     /*
     * @title mint
     * @notice 一般的なmint関数
-    * @param トークンID
     * @dev パブリックセール時に対応
     */
-    function mint(uint256 _tokenId) external payable;
+    function mint() external payable;
 
     /*
     * @title whitelistMint
     * @notice ホワイトリスト用のmint関数
-    * @param トークンID
     * @param マークルプルーフ
     * @dev マークルツリーを利用
     * @dev プレセール時に対応
     */
-    function whitelistMint(uint256 _tokenId,bytes32[] calldata _merkleProof) external payable;
+    function whitelistMint(bytes32[] calldata _merkleProof) external payable;
 
     /*
     * @title mintByOwner
@@ -27,7 +25,7 @@ interface IERC721Mock {
     * @param 送信先
     * @dev 
     */
-    function mintByOwner(uint256[] calldata _tokenIds, address[] calldata _to) external;
+    function mintByOwner(address[] calldata _to) external;
 
     /*
     * @title addMerkleRoot
@@ -42,7 +40,7 @@ interface IERC721Mock {
     * @param 引き出し先のアドレス
     * @dev 収益を分配する場合はこの関数を消去してRevenuePoolを継承
     */
-    function withdraw(address _recipient) external;
+    function withdrawByOwner(address _recipient) external;
 
     /*
     * @title startPresale

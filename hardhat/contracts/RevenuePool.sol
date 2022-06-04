@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "./interface/IRevenuePool.sol";
 
 contract RevenuePool is Ownable, IRevenuePool{
-    uint private totalPayed;
+    uint public totalPayed;
     mapping(address => uint) private _payedToEach;
     mapping(address => uint) public share;
 
@@ -33,7 +33,7 @@ contract RevenuePool is Ownable, IRevenuePool{
     * @devparam share 受け取る収益の割合
     */
     function withdraw(address _recipient, uint _claimed) public virtual override {
-        uint _claimable = (share[msg.sender] / 100) * (address(this).balance + totalPayed) - _payedToEach[msg.sender];
+        uint _claimable = share[msg.sender] * (address(this).balance + totalPayed) / 100 - _payedToEach[msg.sender];
         require(_claimed <= _claimable, "Claimed amount is exceeding claimable limit");
         _claimable -= _claimed;
         totalPayed += _claimed;
@@ -57,7 +57,7 @@ contract RevenuePool is Ownable, IRevenuePool{
     * @notice 引き出し可能な資産額の確認
     */
     function claimable() public view virtual override returns(uint){
-        uint _claimable = (share[msg.sender] / 100) * (address(this).balance + totalPayed) - _payedToEach[msg.sender];
+        uint _claimable = share[msg.sender] * (address(this).balance + totalPayed) / 100 - _payedToEach[msg.sender];
         return(_claimable);
     }
 }

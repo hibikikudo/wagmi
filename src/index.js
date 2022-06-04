@@ -6,8 +6,8 @@ import "@fontsource/press-start-2p";
 import './index.css';
 import { MoralisProvider } from 'react-moralis';
 
-const APP_ID = process.env.REACT_APP_MORALIS_APPLICATION_ID;
-const SERVER_URL = process.env.REACT_APP_MORALIS_SERVER_URL;
+const APP_ID = process.env.APP_ID;
+const SERVER_URL = process.env.SERVER_URL;
 
 const Application = () => {
   if (!APP_ID || !SERVER_URL)

@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 dotenv.config(); // setup dotenv
 
 async function main() {
-  const factory = await hre.ethers.getContractFactory("OONTRACT_NAME");
+  const factory = await hre.ethers.getContractFactory("CONTRACT_NAME");
   const option = {
     gasPrice: 25 * 10**9
   }

@@ -5,13 +5,12 @@ import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "../interface/IERC721Drop.sol";
 
 /* mandatory parameter
 *  1. name 
 *  2. symbol 
 */ 
-contract ERC721Drop is ERC721, IERC721Drop{
+contract ERC721Drop is ERC721 {
   using SafeMath for uint256;
 
   // マークルルート
@@ -55,16 +54,6 @@ contract ERC721Drop is ERC721, IERC721Drop{
   }
 
   /*
-  * @title isHolder
-  * @notice NFTホルダーであることの確認
-  * @div 
-  */
-  modifier onlyCreatorOrAgent {
-    require(msg.sender == _creator || _agent[msg.sender], "This is not allowed except for _creator or agent");
-    _;
-  }
-
-  /*
   * @title whitelistMint
   * @notice ホワイトリスト用のmint関数
   * @param トークンID
@@ -73,9 +62,8 @@ contract ERC721Drop is ERC721, IERC721Drop{
   * @dev プレセール時に対応
   */
   function whiteListMint(
-    uint256 _tokenId,
     bytes32[] calldata _merkleProof
-  ) public virtual override {
+  ) public {
     require(sales == true, "NFTs are not now on sale");
     require(!whitelistClaimed[msg.sender], "Address already claimed");
     require(tokenSupply < MAX_AMOUNT_OF_MINT, "Max supply reached");
@@ -98,7 +86,7 @@ contract ERC721Drop is ERC721, IERC721Drop{
   * @notice マークルルートの設定
   * @dev ホワイトリスト用
   */
-  function setMerkleRoot(bytes32 _merkleRoot) public virtual override onlyCreatorOrAgent {
+  function setMerkleRoot(bytes32 _merkleRoot) public onlyCreatorOrAgent {
     merkleRoot = _merkleRoot;
   }
 
@@ -106,7 +94,7 @@ contract ERC721Drop is ERC721, IERC721Drop{
   * @title startSale
   * @notice フリーミントの開始
   */
-  function startSale() public virtual override onlyCreatorOrAgent {
+  function startSale() public onlyCreatorOrAgent {
     sales = true;
     emit NowOnSale(sales);
   }
@@ -115,7 +103,7 @@ contract ERC721Drop is ERC721, IERC721Drop{
   * @title suspendSale
   * @notice フリーミントの停止
   */
-  function suspendSale() public virtual override onlyCreatorOrAgent {
+  function suspendSale() public onlyCreatorOrAgent {
     sales = false;
     emit NowOnSale(sales);
   }
@@ -126,7 +114,7 @@ contract ERC721Drop is ERC721, IERC721Drop{
   * @param エージェントのアドレス
   * @dev 
   */
-  function license(address agentAddr) public virtual override onlyCreatorOrAgent {
+  function license(address agentAddr) public onlyCreatorOrAgent {
     _agent[agentAddr] = true;
   }
 
@@ -136,7 +124,7 @@ contract ERC721Drop is ERC721, IERC721Drop{
   * @param エージェントのアドレス
   * @dev 
   */
-  function unlicense(address agentAddr) public virtual override onlyCreatorOrAgent {
+  function unlicense(address agentAddr) public onlyCreatorOrAgent {
     _agent[agentAddr] = false;
   }
 
@@ -145,7 +133,7 @@ contract ERC721Drop is ERC721, IERC721Drop{
   * @title setBaseURI
   * @dev 
   */
-  function setBaseURI(string memory uri_) public virtual override onlyCreatorOrAgent {
+  function setBaseURI(string memory uri_) public onlyCreatorOrAgent {
     baseURI_ = uri_;
   }
 
@@ -171,7 +159,7 @@ contract ERC721Drop is ERC721, IERC721Drop{
   * @title setBaseURI
   * @dev 
   */
-  // function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
+  // function tokenURI(uint256 tokenId) public view returns (string memory) {
   //   return _uri;
   // }
 }

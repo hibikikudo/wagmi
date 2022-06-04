@@ -6,12 +6,13 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "../interface/IERC721Mock.sol";
+import "../RevenuePool.sol";
 
 /* mandatory parameter
 *  1. name 
 *  2. symbol 
 */ 
-contract ERC721Mock is ERC721, IERC721Mock{
+contract ERC721Mock is ERC721, RevenuePool, IERC721Mock{
   using SafeMath for uint256;
 
   // トークンの供給量
@@ -47,9 +48,9 @@ contract ERC721Mock is ERC721, IERC721Mock{
     string memory _name,
     string memory _symbol
   ) ERC721(_name, _symbol){
-    MAX_AMOUNT_OF_MINT[1] = 100;
-    MINT_PRICE = 0.05 ether;
-    WL_MINT_PRICE = 0.01 ether;
+    MAX_AMOUNT_OF_MINT = 100;
+    MINT_PRICE = 1 ether;
+    WL_MINT_PRICE = 1 ether;
     sales = SaleState.Suspended;
     _creator = msg.sender;
   }
@@ -70,10 +71,9 @@ contract ERC721Mock is ERC721, IERC721Mock{
   * @param トークンID
   * @dev パブリックセール時に対応
   */
-  function mint(
-    uint256 _tokenId
-  ) public payable virtual override {
-    require(msg.value == MINT_PRICE[_tokenId], "value is incorrect");
+  function mint() public payable virtual override 
+  {
+    require(msg.value == MINT_PRICE, "value is incorrect");
     require(sales == SaleState.PublicSale, "NFTs are not now on sale");
     require(tokenSupply < MAX_AMOUNT_OF_MINT, "Max supply reached");
 
@@ -92,10 +92,9 @@ contract ERC721Mock is ERC721, IERC721Mock{
   * @dev プレセール時に対応
   */
   function whitelistMint(
-    uint256 _tokenId,
     bytes32[] calldata _merkleProof
   ) public payable virtual override {
-    require(msg.value == WL_MINT_PRICE[_tokenId], "value is incorrect");
+    require(msg.value == WL_MINT_PRICE, "value is incorrect");
     require(sales == SaleState.Presale, "NFTs are not now on sale");
     require(!whitelistClaimed[msg.sender], "Address already claimed");
     require(tokenSupply < MAX_AMOUNT_OF_MINT, "Max supply reached");
@@ -146,7 +145,7 @@ contract ERC721Mock is ERC721, IERC721Mock{
   * @param 引き出し先のアドレス
   * @dev 収益を分配する場合はこの関数を消去してRevenuePoolを継承
   */
-  function withdraw(address _recipient) public virtual override onlyCreatorOrAgent {
+  function withdrawByOwner(address _recipient) public virtual override onlyCreatorOrAgent {
     payable(_recipient).transfer(address(this).balance);
     emit Withdraw(_recipient, address(this).balance);
   }
@@ -206,7 +205,7 @@ contract ERC721Mock is ERC721, IERC721Mock{
   * @title setBaseURI
   * @dev 
   */
-  function setBaseURI(string memory uri_) public virtual override onlyCreatorOrAgent {
+  function setBaseURI(string memory uri_) public onlyCreatorOrAgent {
     baseURI_ = uri_;
   }
 
