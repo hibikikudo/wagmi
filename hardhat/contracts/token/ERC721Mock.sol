@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "../interface/IERC721Mock.sol";
 import "../RevenuePool.sol";
 
@@ -12,7 +13,7 @@ import "../RevenuePool.sol";
 *  1. name 
 *  2. symbol 
 */ 
-contract ERC721Mock is ERC721, RevenuePool, IERC721Mock{
+contract ERC721Mock is ERC721, RevenuePool, Ownable, IERC721Mock{
   using SafeMath for uint256;
 
   // トークンの供給量
@@ -28,9 +29,9 @@ contract ERC721Mock is ERC721, RevenuePool, IERC721Mock{
   // コントラクトの作成者
   address private _creator;
   // ベースURI
-  string private baseURI_;
+  string private baseURI_ = 'https://ipfs.moralis.io:2053/ipfs/QmeXq9GPhPEaLwoocRjVS9PNwJJWwLiEb2dFWQuvpKYgZs/metadata';
   // テストURI
-  string private _uri = "ipfs://QmeQAdSCQpTEskc1JYt9QrmR8PCSiGuFJPzCRjjBVWUWq9/metadata/{id}.json";
+  // string private _uri = "ipfs://QmeQAdSCQpTEskc1JYt9QrmR8PCSiGuFJPzCRjjBVWUWq9/metadata/{id}.json";
 
   // 販売状態(列挙型)
   enum SaleState {Presale, PublicSale, Suspended} 
@@ -223,9 +224,9 @@ contract ERC721Mock is ERC721, RevenuePool, IERC721Mock{
   * @title setBaseURI
   * @dev 
   */
-  function setURI(string memory uri_) public onlyCreatorOrAgent {
-    _uri = uri_;
-  }
+  // function setURI(string memory uri_) public onlyCreatorOrAgent {
+  //   _uri = uri_;
+  // }
   
   /*
   * @title setBaseURI

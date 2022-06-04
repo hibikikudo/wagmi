@@ -6,7 +6,7 @@ const Moralis = require("moralis/node");
 const request = require("request");
 const fs = require("fs");
 const { default: axios } = require("axios");
-const { editionSize, assetElement } = require("../asset/config.js");
+const { editionSize, assetElement } = require("../assets/config.js");
 
 const serverUrl = process.env.SERVER_URL;
 const appId = process.env.APP_ID;
@@ -22,17 +22,18 @@ const btoa = (text) => {
 
 // ローカルにmetadataを書き込み
 const writeMetaData = (metadata) => {
-  fs.writeFileSync("./output/_metadata.json", JSON.stringify(metadata));
+  fs.writeFileSync("./hardhat/output/_metadata.json", JSON.stringify(metadata));
 };
 
 // モラリスにアップロード
 const saveToDb = async (metaHash) => {
-  for(let i = 1; i < editionSize + 1; i++){
+  for(let i = 0; i < editionSize; i++){
     let id = i.toString();
-    let paddedHex = (
-      "0000000000000000000000000000000000000000000000000000000000000000" + id
-    ).slice(-64);
-    let url = `https://ipfs.moralis.io:2053/ipfs/${metaHash}/metadata/${paddedHex}.json`;
+    // this operation is for ERC1155
+    // let paddedHex = (
+    //   "0000000000000000000000000000000000000000000000000000000000000000" + id
+    // ).slice(-64);
+    let url = `https://ipfs.moralis.io:2053/ipfs/${metaHash}/metadata/${id}`;
     let options = { json: true };
   
     request(url, options, (error, res, body) => {
@@ -51,29 +52,39 @@ const saveToDb = async (metaHash) => {
         FileDatabase.save();
       }
     });
+    console.log(`${i+1}/${editionSize} have been saved for moralis dashboard`)
   }
 };
 
 const uploadImage = async () => {
   const UrlArray = [];
 
-  for (let i = 1; i < editionSize + 1; i++) {
+  for (let i = 0; i < editionSize; i++) {
     let id = i.toString();
     let image_base64, music_base64, ifiletype, mfiletype;
     
     // データをIPFSにアップロード
-    if(fs.existsSync(`./assets/jackets/${id}.jpeg`)){
-      image_base64 = await btoa(fs.readFileSync(`./assets/jackets/${id}.jpeg`));
+    if(fs.existsSync(`./hardhat/assets/jackets/${id}.jpeg`)){
+      image_base64 = await btoa(fs.readFileSync(`./hardhat/assets/jackets/${id}.jpeg`));
       ifiletype = "jpeg";
-    } else if(fs.existsSync(`./asset/jackets/${id}.gif`)) {
-      image_base64 = await btoa(fs.readFileSync(`./assets/jackets/${id}.gif`, (err,data) => {
+    } else if(fs.existsSync(`./hardhat/assets/jackets/${id}.png`)) {
+      image_base64 = await btoa(fs.readFileSync(`./hardhat/assets/jackets/${id}.png`, (err,data) => {
+        console.log(err)
+      }));
+      ifiletype = "png";
+    } else if(fs.existsSync(`./hardhat/assets/jackets/${id}.gif`)) {
+      image_base64 = await btoa(fs.readFileSync(`./hardhat/assets/jackets/${id}.gif`, (err,data) => {
         console.log(err)
       }));
       ifiletype = "gif";
+    } else {
+      console.log("jackets are not exist.")
     }
-    if(fs.existsSync(`./assets/sounds/sounds.mp3`)){
-      music_base64 = await btoa(fs.readFileSync(`./assets/sounds/sound.mp3`));
+    if(fs.existsSync(`./hardhat/assets/sounds/sound.mp3`)){
+      music_base64 = await btoa(fs.readFileSync(`./hardhat/assets/sounds/sound.mp3`));
       mfiletype = "mp3";
+    } else {
+      console.log("sounds are not exist.")
     }
     // else if(fs.existsSync(`./asset/${id}/music.mp3`)) {
     //   music_base64 = await btoa(fs.readFileSync(`./asset/${id}/music.mp3`));
@@ -85,11 +96,11 @@ const uploadImage = async () => {
     //   mfiletype = "mp3";
     // }
 
-    let image_file = new Moralis.File("image", { base64: `data:image/${ifiletype};base64,${image_base64}` });
-    let music_file = new Moralis.File("music", { base64: `data:audio/${mfiletype};base64,${music_base64}` });
+    let image_file = new Moralis.File("image.png", { base64: `data:image/${ifiletype};base64,${image_base64}` });
+    let music_file = new Moralis.File("music.mp3", { base64: `data:audio/${mfiletype};base64,${music_base64}` });
     await image_file.saveIPFS({ useMasterKey: true });
     await music_file.saveIPFS({ useMasterKey: true });
-    console.log(`Processing ${i}/${editionSize}...`)
+    console.log(`Processing ${i+1}/${editionSize}...`)
     console.log("IPFS address of Image: ", image_file.ipfs());
     console.log("IPFS address of Music: ", music_file.ipfs());
 
@@ -109,7 +120,7 @@ const createMetadata = async () => {
   const DataArray  = await uploadImage();
 
   for (let i = 0; i < editionSize; i++){
-    let id = (i+1).toString()
+    let id = (i).toString()
     let imageURL = DataArray[i].imageURL
     let musicURL = DataArray[i].musicURL
   
@@ -124,7 +135,7 @@ const createMetadata = async () => {
     metaDataArray.push(metadata);
   
     fs.writeFileSync(
-      `./output/${id}.json`,
+      `./hardhat/output/${id}.json`,
       JSON.stringify(metadata)
     );
   }
@@ -135,19 +146,20 @@ const uploadMetadata = async () => {
   const promiseArray = []; 
   const ipfsArray = []; 
 
-  for(let i = 1; i < editionSize + 1; i++){
+  for(let i = 0; i < editionSize; i++){
     let id = i.toString();
-    let paddedHex = (
-      "0000000000000000000000000000000000000000000000000000000000000000" + id
-    ).slice(-64);
+    // This 
+    // let paddedHex = (
+    //   "0000000000000000000000000000000000000000000000000000000000000000" + id
+    // ).slice(-64);
   
     // jsonファイルをipfsArrayにpush
     promiseArray.push(
       new Promise((res, rej) => {
-        fs.readFile(`./output/${id}.json`, (err, data) => {
+        fs.readFile(`./hardhat/output/${id}.json`, (err, data) => {
           if (err) rej();
           ipfsArray.push({
-            path: `metadata/${paddedHex}.json`,
+            path: `metadata/${id}`,
             content: data.toString("base64")
           });
           res();
@@ -171,6 +183,7 @@ const uploadMetadata = async () => {
       console.log("META FILE PATHS:", res.data);
       //モラリスにアップロード
       saveToDb(metaCID);
+      console.log("all saved")
     })
     .catch(err => {
       console.log(err);
@@ -181,6 +194,7 @@ const uploadMetadata = async () => {
 const startCreating = async () => {
   await createMetadata();
   await uploadMetadata();
+  console.log("All finished!")
 };
 
 startCreating();
