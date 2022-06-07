@@ -5,12 +5,13 @@ import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 /* mandatory parameter
 *  1. name 
 *  2. symbol 
 */ 
-contract ERC721Drop is ERC721 {
+contract ERC721Drop is ERC721, Ownable {
   using SafeMath for uint256;
 
   // マークルルート
@@ -18,9 +19,9 @@ contract ERC721Drop is ERC721 {
   // コントラクトの作成者
   address private _creator;
   // ベースURI
-  string private baseURI_;
+  string private baseURI_ = 'https://ipfs.moralis.io:2053/ipfs/QmeXq9GPhPEaLwoocRjVS9PNwJJWwLiEb2dFWQuvpKYgZs/metadata/';
   // テストURI
-  string private _uri = "ipfs://QmeQAdSCQpTEskc1JYt9QrmR8PCSiGuFJPzCRjjBVWUWq9/metadata/{id}.json";
+  // string private _uri = "ipfs://QmeQAdSCQpTEskc1JYt9QrmR8PCSiGuFJPzCRjjBVWUWq9/metadata/{id}.json";
   // 供給量の上限
   uint256 public MAX_AMOUNT_OF_MINT;
   // トークンの供給量
@@ -39,7 +40,7 @@ contract ERC721Drop is ERC721 {
     string memory _symbol
   ) ERC721(_name, _symbol){
     MAX_AMOUNT_OF_MINT = 100;
-    _creator = msg.sender;
+    _creator = _msgSender();
     sales = false;
   }
 
@@ -49,7 +50,7 @@ contract ERC721Drop is ERC721 {
   * @div 
   */
   modifier onlyCreatorOrAgent {
-    require(msg.sender == _creator || _agent[msg.sender], "This is not allowed except for _creator or agent");
+    require(_msgSender() == _creator || _agent[_msgSender()], "This is not allowed except for _creator or agent");
     _;
   }
 
@@ -61,19 +62,19 @@ contract ERC721Drop is ERC721 {
   * @dev マークルツリーを利用
   * @dev プレセール時に対応
   */
-  function whiteListMint(
+  function whitelistMint(
     bytes32[] calldata _merkleProof
   ) public {
     require(sales == true, "NFTs are not now on sale");
-    require(!whitelistClaimed[msg.sender], "Address already claimed");
+    require(!whitelistClaimed[recipient], "Address already claimed");
     require(tokenSupply < MAX_AMOUNT_OF_MINT, "Max supply reached");
 
-    bytes32 leaf = keccak256(abi.encodePacked(msg.sender));
+    bytes32 leaf = keccak256(abi.encodePacked(_msgSender()));
     require(
       MerkleProof.verify(_merkleProof, merkleRoot, leaf),
       "Invalid Merkle Proof."
     );
-    whitelistClaimed[msg.sender] = true;
+    whitelistClaimed[_msgSender()] = true;
 
     uint _newTokenId = tokenSupply;
     tokenSupply = tokenSupply.add(1);
@@ -151,9 +152,9 @@ contract ERC721Drop is ERC721 {
   * @title setBaseURI
   * @dev 
   */
-  function setURI(string memory uri_) public onlyCreatorOrAgent {
-    _uri = uri_;
-  }
+  // function setURI(string memory uri_) public onlyCreatorOrAgent {
+  //   _uri = uri_;
+  // }
   
   /*
   * @title setBaseURI

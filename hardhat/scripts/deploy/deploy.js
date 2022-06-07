@@ -3,14 +3,13 @@ const dotenv = require("dotenv");
 dotenv.config(); // setup dotenv
 
 async function main() {
-  const factory = await hre.ethers.getContractFactory("CONTRACT_NAME");
+  const factory = await hre.ethers.getContractFactory("ERC721Drop");
   const option = {
     gasPrice: 25 * 10**9
   }
   const contract = await factory.deploy(
     "WAGMI Music",
-    "disc",
-    option
+    "disc"
   );
   await contract.deployed();
   console.log("NFT deployed to:", contract.address);

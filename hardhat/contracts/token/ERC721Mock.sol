@@ -13,7 +13,8 @@ import "../RevenuePool.sol";
 *  1. name 
 *  2. symbol 
 */ 
-contract ERC721Mock is ERC721, RevenuePool, Ownable, IERC721Mock{
+// should inherit either RevenuePool or Ownable due to Ownable linearization
+contract ERC721Mock is ERC721, RevenuePool, IERC721Mock{
   using SafeMath for uint256;
 
   // トークンの供給量
