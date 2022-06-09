@@ -7,7 +7,7 @@ import { useMoralis } from "react-moralis";
 import MintButton from "./MintButton";
 
 // const contractAddress = process.env.CONTRACT_ADDRESS
-const contractAddress = "0x64B4B8AD8AB87F988d0FE67c38aFE1acd61B9348";
+const contractAddress = "0xBdd37ff0E89E61A8c91f75554A02c80B96374680";
 let web3Provider, contract, sale_filter;
 
 if(window.ethereum){
