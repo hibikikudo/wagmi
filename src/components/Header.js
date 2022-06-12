@@ -35,7 +35,12 @@ const Header = ({title = "wagmi"}) => {
                     href={Path.home}
                     className={classes.logo}
                     >
-                    <Typography>{title}</Typography>
+                    <img
+                        height={30}
+                        width={100}
+                        src="/image/wagmi_logo_noshadow_350_350.png" alt="wagmi"
+                        style={{objectFit: 'cover'}}
+                        />
                 </Button>
                 </Grid>
                 <Grid item xs={10} container spacing={1} justifyContent="flex-end">
