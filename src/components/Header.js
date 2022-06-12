@@ -22,7 +22,7 @@ const useStyles = makeStyles({
     font: {
         fontFamily: "Press Start 2P"
     }
-})
+});
 const Header = ({title = "wagmi"}) => {
     const classes = useStyles();
     return <div className={classes.font}>

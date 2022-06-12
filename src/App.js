@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useMoralis } from "react-moralis";
-
 import { ThemeProvider } from "@material-ui/core";
 import Header from "./components/Header";
 import Home from "./pages/HomePage";
@@ -29,7 +28,7 @@ const App = () => {
         }}>
           <Header />
           <MyRoutes />
-        </div>
+          </div>
       </ThemeProvider>
     </>
   );
