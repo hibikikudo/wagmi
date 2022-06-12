@@ -5,10 +5,11 @@ import { faDiscord, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import ConnectWalletButton from '../moralis/ConnectWalletButton';
 import { Path } from './Routes';
 
-const pages = ['Products', 'Pricing', 'Blog'];
-
-
 const useStyles = makeStyles({
+    header: {
+        background: 'transparent',
+        boxShadow: 'none'
+    },
     icon: {
         fontSize: 25
     },
@@ -17,13 +18,16 @@ const useStyles = makeStyles({
     },
     customButton: {
 
+    },
+    font: {
+        fontFamily: "Press Start 2P"
     }
 })
-const Header = () => {
+const Header = ({title = "wagmi"}) => {
     const classes = useStyles();
-    return <div style={{fontFamily: "Press Start 2P"}}>
+    return <div className={classes.font}>
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" style={{ background: 'transparent', boxShadow: 'none'}}>
+      <AppBar position="static" className={classes.header}>
         <Toolbar>
             <Grid container>
                 <Grid item xs={2}>
@@ -31,7 +35,7 @@ const Header = () => {
                     href={Path.home}
                     className={classes.logo}
                     >
-                    <Typography>wagmi</Typography>
+                    <Typography>{title}</Typography>
                 </Button>
                 </Grid>
                 <Grid item xs={10} container spacing={1} justifyContent="flex-end">
