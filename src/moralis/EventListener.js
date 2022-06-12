@@ -5,6 +5,7 @@ import { ethers } from "ethers";
 import { useEffect, useState } from 'react';
 import { useMoralis } from "react-moralis";
 import MintButton from "./MintButton";
+import MusicCard from '../components/MusicCard';
 
 // const contractAddress = process.env.CONTRACT_ADDRESS
 const contractAddress = "0xBdd37ff0E89E61A8c91f75554A02c80B96374680";
@@ -37,7 +38,9 @@ const EventListener = () => {
       </Grid>
     )
   }else{
-    return;
+    return <div>
+      <MusicCard />
+    </div>;
   }
 };
 

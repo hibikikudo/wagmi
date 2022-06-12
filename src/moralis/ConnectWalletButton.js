@@ -2,9 +2,20 @@ import { useEffect } from "react";
 import { useMoralis } from "react-moralis";
 import { getEllipsisTxt } from "../helpers/formatters";
 import { useState } from "react";
-import { Button } from "@material-ui/core";
+import { Button, makeStyles } from "@material-ui/core";
 
-const ConnectWalletButton = () => {
+const useStyles = makeStyles({
+  button: {
+    width: 100,
+    fontFamily: 'Lato',
+    background: "#FFCF00",
+    borderRadius: 0,
+    boxShadow: '3px 3px 0.1px 0.1px rgba(0, 0, 0, .1)',
+    //color: 'white'
+  }
+});
+const ConnectWalletButton = ({color = '#333'}) => {
+    const classes = useStyles();
     const { authenticate, isAuthenticated, isAuthenticating, account, chainId, logout } = useMoralis();
     const [address, setAddress] = useState();
 
@@ -38,8 +49,16 @@ const ConnectWalletButton = () => {
   return (
     <div>
       {isAuthenticated && account ? 
-      <Button onClick={logOut} disabled={isAuthenticating}>{getEllipsisTxt(account, 3)}</Button>
-      : <Button onClick={login}>ConnectWallet</Button>}
+      <Button
+        style={{color: color}}
+        className={classes.button}
+        onClick={logOut}
+        disabled={isAuthenticating}>
+          {getEllipsisTxt(account, 3)}
+        </Button>
+      : <Button
+        style={{color: color}}
+        onClick={login}>ConnectWallet</Button>}
     </div>
   );
 };

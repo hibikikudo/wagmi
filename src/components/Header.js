@@ -6,28 +6,32 @@ import ConnectWalletButton from '../moralis/ConnectWalletButton';
 import { Path } from './Routes';
 
 const useStyles = makeStyles({
-    header: {
+    headerBar: {
         background: 'transparent',
-        boxShadow: 'none'
+        boxShadow: 'none',
+        //color: 'white'
     },
     icon: {
+        //color: 'white',
         fontSize: 25
     },
     logo: {
         fontSize: 40
     },
     customButton: {
-
+        //color: 'white'
+        fontFamily: 'Lato',
+        fontWeight: 'bold'
     },
-    font: {
-        fontFamily: "Press Start 2P"
+    header: {
+        //position: 'absolute'
     }
 });
-const Header = ({title = "wagmi"}) => {
+const Header = ({color = '#333'}) => {
     const classes = useStyles();
-    return <div className={classes.font}>
+    return <div className={classes.header}>
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" className={classes.header}>
+      <AppBar position="static" className={classes.headerBar}>
         <Toolbar>
             <Grid container>
                 <Grid item xs={2}>
@@ -48,6 +52,7 @@ const Header = ({title = "wagmi"}) => {
                         <Button 
                             href={Path.home}
                             className={classes.customButton}
+                            style={{color: color}}
                             >
                           Home
                         </Button>
@@ -56,28 +61,31 @@ const Header = ({title = "wagmi"}) => {
                         <Button 
                             href={Path.mint}
                             className={classes.customButton}
+                            style={{color: color}}
                             >
                           Mint
                         </Button>
                     </Grid>
                     <Grid item>
                         <Button
-                            href="https://twitter.com/allegory_write"
+                            href="https://twitter.com/hibikilla30"
                             target="_blank"
+                            style={{color: color}}
                             >
                             <FontAwesomeIcon className={classes.icon} icon={faTwitter} />
                         </Button>
                     </Grid>
                     <Grid item>
                         <Button
-                            href="https://discord.com/"
+                            href="https://discord.gg/GP3hd48s"
                             target="_blank"
+                            style={{color: color}}
                             >
                             <FontAwesomeIcon className={classes.icon} icon={faDiscord} />
                         </Button>
                     </Grid>
                     <Grid item>
-                        <ConnectWalletButton />
+                        <ConnectWalletButton color={color}/>
                     </Grid>
                 </Grid>
             </Grid>

@@ -16,7 +16,7 @@ const MintButton = () => {
 
   return (
   <div>
-    <Button onClick={() => fetch()} disabled={isFetching}>Mint</Button>
+    <Button style={{backgroundColor: '#333', color: 'white'}} onClick={() => fetch()} disabled={isFetching}>Mint</Button>
   </div>)
 
 }

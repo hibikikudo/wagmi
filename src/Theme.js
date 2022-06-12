@@ -3,6 +3,7 @@ import { createTheme } from '@material-ui/core/styles';
 const theme = createTheme({
     typography: {
         fontFamily: "Press Start 2P",
+        color: 'white',
         button: {
             textTransform: "none",
             fontFamily: "Press Start 2P"
