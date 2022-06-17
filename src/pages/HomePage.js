@@ -1,5 +1,6 @@
 import { Grid, makeStyles, Typography } from "@material-ui/core";
 import AboutUs from "../components/AboutUs";
+import Tokenomics from "../components/Tokenomics";
 import CountDown from "../components/CountDown";
 import Header from "../components/Header";
 
@@ -21,8 +22,11 @@ const HomePage = () => {
             <Grid item xs={12}>
                 <CountDown></CountDown>
             </Grid>
+        </Grid>
+        <Grid container justifyContent="center">
             <AboutUs />
         </Grid>
+        <Tokenomics></Tokenomics>
         </div>
     </>;
 };
