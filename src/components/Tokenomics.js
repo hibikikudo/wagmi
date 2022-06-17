@@ -41,7 +41,7 @@ const useStyles = makeStyles({
     top: "51%",
     left: "50%",
     transform: "translate(-50%,-50%)",
-    background: "#4A434D",
+    background: "#030303",
     "text-align": "center",
     "line-height": "150px"
   },
@@ -50,14 +50,13 @@ const useStyles = makeStyles({
     height: "50px",
     fontSize: 24,
     position: "relative",
-    'margin-left': '10%'
+    'margin-left': '14%'
   },
   salesColumn: {
     width: "200px",
     height: "50px",
     top: "50%",
     left: "50%",
-    transform: "translate(-100px,-20px) rotate(-30deg) translate(198px,0) rotate(30deg) translate(100px,25px) translate(-5%,-50%)",
     display: 'flex',
     flexDirection: 'row',
     position: "absolute",
@@ -68,17 +67,85 @@ const useStyles = makeStyles({
     width: "8px",
     height: "8px",
     "border-radius": "50%",
-    background: "#030303",
     position: "relative"
+  },
+  salesPoint1: {
+    width: "8px",
+    height: "8px",
+    "border-radius": "50%",
+    position: "absolute"
+  },
+  tokenSupply: {
+    width: "auto",
+    height: "auto",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%,-50%)",
+    position: "absolute",
+    fontFamily: 'Lato',
+    "text-align": "center",
+    "line-height": "25px",
+    color: "#FFFAF3"
+  },
+  tokenAmount: {
+    display: 'flex',
+    "align-items": "flex-end"
+  },
+  sbold: {
+    fontSize: "14px",
+    fontWeight: 'bold',
+    "margin-left": "5px"
+  },
+  bbold: {
+    fontSize: "18px",
+    fontWeight: 'bold',
+    "margin-left": "5px"
+  },
+  thin: {
+    fontSize: "12px",
+    "line-height": "20px"
   }
-})
+});
 
-const Saleslabel = ({label}) => {
-  const classes = useStyles();
-  return <div className={classes.salesColumn}>
-    <div className={classes.salesPoint}></div>
-    <div className={classes.salesLabel}>{label}</div>
+const SalesLabels = ({sales}) => {
+  if(sales === "presale"){
+    return <div>
+    <SalesLabel label="presale" progress="true" degree1="-45" degree2="45"/>
+    <SalesLabel label="public sale" progress="false" degree1="0" degree2="0"/>
+    <SalesLabel label="end of sale" progress="false" degree1="45" degree2="-45"/>
   </div>
+  }else if(sales === "public sale"){
+    return <div>
+    <SalesLabel label="presale" progress="true" degree1="-45" degree2="45"/>
+    <SalesLabel label="public sale" progress="true" degree1="0" degree2="0"/>
+    <SalesLabel label="end of sale" progress="false" degree1="45" degree2="-45"/>
+  </div>
+  }else{
+    return <div>
+    <SalesLabel label="presale" progress="true" degree1="-45" degree2="45"/>
+    <SalesLabel label="public sale" progress="true" degree1="0" degree2="0"/>
+    <SalesLabel label="end of sale" progress="true" degree1="45" degree2="-45"/>
+  </div>
+  }
+};
+
+const SalesLabel = ({label, progress, degree1, degree2}) => {
+  const classes = useStyles();
+  if(progress === "true"){
+    return <div 
+    className={classes.salesColumn} 
+    style={{transform: `translate(-100px,-20px) rotate(${degree1}deg) translate(198px,0) rotate(${degree2}deg) translate(100px,25px) translate(-3%,-50%)`}}>
+    <div className={classes.salesPoint} style={{background: "#030303"}}></div>
+    <div className={classes.salesLabel} style={{color: "#030303"}}>{label}</div>
+  </div>
+  }else{
+    return <div 
+    className={classes.salesColumn} 
+    style={{transform: `translate(-100px,-20px) rotate(${degree1}deg) translate(198px,0) rotate(${degree2}deg) translate(100px,25px) translate(-3%,-50%)`}}>
+    <div className={classes.salesPoint} style={{background: "#F4E8D6"}}></div>
+    <div className={classes.salesLabel} style={{color: "#F4E8D6"}}>{label}</div>
+    </div>
+  }
 };
 
 const Tokenomics = () => {
@@ -86,8 +153,8 @@ const Tokenomics = () => {
   const graphdata1 = {
     datasets: [
      {
-       data: [15, 25, 35],
-       backgroundColor: ['#B9D8F7', '#FFE5EC', '#DEDFE0'],
+       data: [25, 75],
+       backgroundColor: ['#030303', '#F4E8D6'],
        borderWidth: 1,
        borderRadius: 1,
        radius:200,
@@ -105,11 +172,11 @@ const Tokenomics = () => {
  const graphdata2 = {
    datasets: [
     {
-      data: [15, 25, 35],
-      backgroundColor: ['#B9D8F7', '#FFE5EC', '#DEDFE0'],
+      data: [40, 60],
+      backgroundColor: ['#030303', '#F4E8D6'],
       borderWidth: 1,
       borderRadius: 1,
-      radius:180,
+      radius:170,
       cutout:"60%"
     },
    ],
@@ -127,19 +194,22 @@ const Tokenomics = () => {
    <div className={classes.columnCenter}>
      <div className={classes.title}>Tokenomics</div>
      <div className={classes.graph}>
-        <div className={classes.circle}>1</div>
-        {/* <StyledCircularBar 
-          variant="determinate" 
-          thickness={1}
-          size={200} 
-          value={30} /> */}
+        <div className={classes.circle}></div>
+        <div className={classes.tokenSupply}>
+          <div className={classes.sbold}>total minted</div>
+          <div className={classes.tokenAmount}>
+            <div className={classes.bbold}>26</div>
+            <div className={classes.thin}>/48</div>
+            <div className={classes.bbold}>tokens</div>
+          </div>
+        </div>
         <StyledDoughnuts
           data={graphdata1} 
           options={doughnutOptions1} />
         <StyledDoughnuts
           data={graphdata2} 
           options={doughnutOptions2} />
-        <Saleslabel label="public sale" />
+        <SalesLabels sales="public sale"/>
      </div>
    </div>
  );
