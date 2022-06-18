@@ -2,17 +2,14 @@
 const dotenv = require("dotenv");
 dotenv.config(); // setup dotenv
 
-const owner = "0xaDAcbA4Cae9471C26D613F7A94014549a647783C";
-
 async function main() {
-  const factory = await hre.ethers.getContractFactory("Sumple");
+  const factory = await hre.ethers.getContractFactory("ERC721Mock");
   const option = {
     gasPrice: 25 * 10**9
   }
   const contract = await factory.deploy(
     "WAGMI Music",
-    "disc",
-    owner
+    "disc"
   );
   await contract.deployed();
   console.log("NFT deployed to:", contract.address);

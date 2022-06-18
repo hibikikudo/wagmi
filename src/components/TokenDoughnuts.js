@@ -107,21 +107,128 @@ const useStyles = makeStyles({
   }
 });
 
+const TokenDoughnut = ({supply, minted}) => {
+  const graphdata = {
+    datasets: [
+    {
+      data: [minted, supply - minted],
+      backgroundColor: ['#030303', '#F4E8D6'],
+      borderWidth: 1,
+      borderRadius: 1,
+      radius:170,
+      cutout:"60%"
+    },
+   ],
+  };
+
+  const doughnutOptions = {
+    legend: {
+      display: false,
+    },
+  };
+
+  return <div>
+    <StyledDoughnuts
+          data={graphdata} 
+          options={doughnutOptions} />
+  </div>
+}
+
 const SalesLabels = ({sales}) => {
-  if(sales === "presale"){
+  // const graphdata = {
+  //   datasets: [
+  //    {
+  //      data: [25, 75],
+  //      backgroundColor: ['#030303', '#F4E8D6'],
+  //      borderWidth: 1,
+  //      borderRadius: 1,
+  //      radius:200,
+  //      cutout:"98%"
+  //    },
+  //   ],
+  // };
+
+  // const graphdata_pre = {
+  //   datasets: [
+  //    {
+  //      data: [100],
+  //      backgroundColor: ['#F4E8D6'],
+  //      borderWidth: 1,
+  //      borderRadius: 1,
+  //      radius:200,
+  //      cutout:"98%"
+  //    },
+  //   ],
+  // };
+
+  const graphdata_presale = {
+    datasets: [
+     {
+       data: [12.5, 87.5],
+       backgroundColor: ['#030303', '#F4E8D6'],
+       borderWidth: 1,
+       borderRadius: 1,
+       radius:200,
+       cutout:"98%"
+     },
+    ],
+  };
+
+  const graphdata_public = {
+    datasets: [
+     {
+       data: [25, 75],
+       backgroundColor: ['#030303', '#F4E8D6'],
+       borderWidth: 1,
+       borderRadius: 1,
+       radius:200,
+       cutout:"98%"
+     },
+    ],
+  };
+
+  const graphdata_end = {
+    datasets: [
+     {
+       data: [37.5, 62.5],
+       backgroundColor: ['#030303', '#F4E8D6'],
+       borderWidth: 1,
+       borderRadius: 1,
+       radius:200,
+       cutout:"98%"
+     },
+    ],
+  };
+
+  const doughnutOptions = {
+    legend: {
+      display: false,
+    },
+  };
+
+  if(sales === 0){
     return <div>
+    <StyledDoughnuts
+      data={graphdata_presale} 
+      options={doughnutOptions} />
     <SalesLabel label="presale" progress="true" degree1="-45" degree2="45"/>
     <SalesLabel label="public sale" progress="false" degree1="0" degree2="0"/>
     <SalesLabel label="end of sale" progress="false" degree1="45" degree2="-45"/>
   </div>
-  }else if(sales === "public sale"){
+  }else if(sales === 1){
     return <div>
+    <StyledDoughnuts
+      data={graphdata_public} 
+      options={doughnutOptions} />
     <SalesLabel label="presale" progress="true" degree1="-45" degree2="45"/>
     <SalesLabel label="public sale" progress="true" degree1="0" degree2="0"/>
     <SalesLabel label="end of sale" progress="false" degree1="45" degree2="-45"/>
   </div>
   }else{
     return <div>
+    <StyledDoughnuts
+      data={graphdata_end} 
+      options={doughnutOptions} />
     <SalesLabel label="presale" progress="true" degree1="-45" degree2="45"/>
     <SalesLabel label="public sale" progress="true" degree1="0" degree2="0"/>
     <SalesLabel label="end of sale" progress="true" degree1="45" degree2="-45"/>
@@ -148,45 +255,7 @@ const SalesLabel = ({label, progress, degree1, degree2}) => {
   }
 };
 
-const Tokenomics = () => {
-
-  const graphdata1 = {
-    datasets: [
-     {
-       data: [25, 75],
-       backgroundColor: ['#030303', '#F4E8D6'],
-       borderWidth: 1,
-       borderRadius: 1,
-       radius:200,
-       cutout:"98%"
-     },
-    ],
-  };
- 
-  const doughnutOptions1 = {
-    legend: {
-      display: false,
-    },
-  };
-
- const graphdata2 = {
-   datasets: [
-    {
-      data: [40, 60],
-      backgroundColor: ['#030303', '#F4E8D6'],
-      borderWidth: 1,
-      borderRadius: 1,
-      radius:170,
-      cutout:"60%"
-    },
-   ],
- };
-
- const doughnutOptions2 = {
-   legend: {
-     display: false,
-   },
- };
+const TokenDoughnuts = ({sales, supply, minted}) => {
 
  const classes = useStyles();
 
@@ -198,18 +267,13 @@ const Tokenomics = () => {
         <div className={classes.tokenSupply}>
           <div className={classes.sbold}>total minted</div>
           <div className={classes.tokenAmount}>
-            <div className={classes.bbold}>26</div>
-            <div className={classes.thin}>/48</div>
+            <div className={classes.bbold}>{minted}</div>
+            <div className={classes.thin}>/{supply}</div>
             <div className={classes.bbold}>tokens</div>
           </div>
         </div>
-        <StyledDoughnuts
-          data={graphdata1} 
-          options={doughnutOptions1} />
-        <StyledDoughnuts
-          data={graphdata2} 
-          options={doughnutOptions2} />
-        <SalesLabels sales="public sale"/>
+        <TokenDoughnut supply={supply} minted={minted}></TokenDoughnut>
+        <SalesLabels sales={sales}/>
      </div>
    </div>
  );
@@ -265,4 +329,4 @@ const Tokenomics = () => {
 //   )
 // }
 
-export default Tokenomics;
+export default TokenDoughnuts;

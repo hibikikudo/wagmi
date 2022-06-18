@@ -8,7 +8,7 @@ import MintButton from "./MintButton";
 import MusicCard from '../components/MusicCard';
 
 // const contractAddress = process.env.CONTRACT_ADDRESS
-const contractAddress = "0xBdd37ff0E89E61A8c91f75554A02c80B96374680";
+const contractAddress = "0xECc866f9D76ef66A92D3BDb61F558582b56Cdeb1";
 let web3Provider, contract, sale_filter;
 
 if(window.ethereum){
@@ -30,16 +30,22 @@ const EventListener = () => {
   });
   console.log("isAuth",isAuthenticated);
   console.log("account",account);
+  console.log("event",sales);
 
-  if(sales && isAuthenticated && account){
-    return(
-      <Grid item>
-          <MintButton/>
-      </Grid>
-    )
+  /*
+  *  sales == 0 => Presale
+  *  sales == 1 => PublicSale
+  *  sales == 2 => Suspended
+  */
+  if(sales === 2 && isAuthenticated && account){
+    return <div>
+      <MintButton></MintButton>
+      {/* <MusicCard /> */}
+    </div>;
   }else{
     return <div>
-      <MusicCard />
+      <MintButton></MintButton>
+      {/* <MusicCard /> */}
     </div>;
   }
 };

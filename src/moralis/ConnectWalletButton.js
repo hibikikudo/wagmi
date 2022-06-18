@@ -24,6 +24,7 @@ const ConnectWalletButton = ({color = '#333'}) => {
   }, [account, isAuthenticated]);
 
   const login = async () => {
+  console.log("Authtest", isAuthenticated);
     if (!isAuthenticated || !account) {
 
       await authenticate({signingMessage: "Log in using Moralis" })

@@ -1,6 +1,6 @@
 import { Grid, makeStyles, Typography } from "@material-ui/core";
 import AboutUs from "../components/AboutUs";
-import Tokenomics from "../components/Tokenomics";
+import Tokenomics from "../moralis/Tokenomics";
 import CountDown from "../components/CountDown";
 import Header from "../components/Header";
 
