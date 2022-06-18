@@ -9,19 +9,38 @@ const useStyles = makeStyles({
     headerBar: {
         background: 'transparent',
         boxShadow: 'none',
-        //color: 'white'
+        //color: 'white',
+        // "align-items":"center",
     },
     icon: {
         //color: 'white',
-        fontSize: 25
+        width: 30,
+        height: "auto",
+        fontSize: 20,
     },
     logo: {
-        fontSize: 40
+        marginTop: 20,
+        fontSize: 20,
     },
     customButton: {
         //color: 'white'
+        fontSize: 20,
         fontFamily: 'Lato',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        "box-sizing": "border-box"
+    },
+    wallet: {
+        margin: 100,
+    },
+    buttonMargin: {
+        marginTop: 30,
+        marginRight: 30,
+        "box-sizing": "border-box"
+    },
+    iconMargin: {
+        marginTop: 35,
+        padding: 20,
+        "box-sizing": "border-box"
     },
     header: {
         //position: 'absolute'
@@ -40,15 +59,15 @@ const Header = ({color = '#333'}) => {
                     className={classes.logo}
                     >
                     <img
-                        height={30}
-                        width={100}
+                        height={60}
+                        width={200}
                         src="/image/wagmi_logo_noshadow_350_350.png" alt="wagmi"
                         style={{objectFit: 'cover'}}
                         />
                 </Button>
                 </Grid>
                 <Grid item xs={10} container spacing={1} justifyContent="flex-end">
-                    <Grid item>
+                    <Grid item className={classes.buttonMargin}>
                         <Button 
                             href={Path.home}
                             className={classes.customButton}
@@ -57,7 +76,7 @@ const Header = ({color = '#333'}) => {
                           Home
                         </Button>
                     </Grid>
-                    <Grid item>
+                    <Grid item className={classes.buttonMargin}>
                         <Button 
                             href={Path.mint}
                             className={classes.customButton}
@@ -66,7 +85,7 @@ const Header = ({color = '#333'}) => {
                           Mint
                         </Button>
                     </Grid>
-                    <Grid item>
+                    <Grid item className={classes.iconMargin}>
                         <Button
                             href="https://twitter.com/hibikilla30"
                             target="_blank"
@@ -75,7 +94,7 @@ const Header = ({color = '#333'}) => {
                             <FontAwesomeIcon className={classes.icon} icon={faTwitter} />
                         </Button>
                     </Grid>
-                    <Grid item>
+                    <Grid item className={classes.iconMargin}>
                         <Button
                             href="https://discord.gg/GP3hd48s"
                             target="_blank"
@@ -85,7 +104,7 @@ const Header = ({color = '#333'}) => {
                         </Button>
                     </Grid>
                     <Grid item>
-                        <ConnectWalletButton color={color}/>
+                        <ConnectWalletButton color={color} className={classes.wallet}/>
                     </Grid>
                 </Grid>
             </Grid>

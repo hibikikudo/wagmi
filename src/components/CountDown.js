@@ -22,15 +22,16 @@ const useStyles = makeStyles({
         alignItems: 'center'
     },
     countCol: {
-        width: 120,
-        height: 120,
+        width: 200,
+        height: 200,
+        margin: 20,
         display: 'flex',
         justifyContent: 'center',
         flexDirection: 'column',
         alignItems: 'center',
-        backgroundColor: '#eee',
-        boxShadow: 'inset 0px 0px 5px 5px rgba(0, 0, 0, .1)',
-        borderRadius: 10,
+        backgroundColor: '#F2EBE4',
+        boxShadow: 'inset 0px 2px 5px 0px rgba(0, 0, 0, 0.2)',
+        borderRadius: "15%",
         fontSize: 30,
         color: '#F2EBE4',
     },
@@ -39,18 +40,19 @@ const useStyles = makeStyles({
         justifyContent: 'space-between',
         flexDirection: 'column',
         alignItems: 'center',
-        fontSize: 60,
+        fontSize: 80,
         margin: 5,
-        fontFamily: 'Lato'
+        fontFamily: 'Lato',
+
     },
     number: {
-        fontSize: 60,
+        fontSize: 100,
         color: '#333',
         fontFamily: 'Lato',
-        fontWeight: 'bold',
+        fontWeight: 700,
     },
     unit: {
-        fontSize: 15,
+        fontSize: 20,
         color: '#333',
         fontFamily: 'Lato',
         fontWeight: 'bold'
@@ -66,8 +68,8 @@ const Time = ({days, hours, minutes, seconds}) => {
 
         <div className={classes.columnCenter}>
             <div className={classes.columnCenter}>
-                <Typography style={{margin: 10}}>
-                    New Single will be released soon
+                <Typography style={{fontSize: 40, marginBottom: 50}}>
+                    New Single will be released soon . . .
                 </Typography>
             </div>
             <div className={classes.rowCenter}>

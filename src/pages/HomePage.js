@@ -19,18 +19,19 @@ const HomePage = () => {
     return <>
         <div className={classes.back}>
         <Header color="#333"/>
-        <Spacer height={200}/>
+        <Spacer height={100}/>
         <Grid container justifyContent="center">
             <Grid item xs={12}>
                 <CountDown></CountDown>
             </Grid>
         </Grid>
-        <Spacer height={200}/>
+        <Spacer height={100}/>
+        <Tokenomics></Tokenomics>
+        <Spacer height={20}/>
         <Grid container justifyContent="center">
             <AboutUs />
         </Grid>
-        <Spacer height={150}/>
-        <Tokenomics></Tokenomics>
+        <Spacer height={100}/>
         </div>
     </>;
 };

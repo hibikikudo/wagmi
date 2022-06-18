@@ -19,7 +19,7 @@ const StyledDoughnuts = styled(Doughnut)`
 
 const useStyles = makeStyles({
   title: {
-    fontSize: 40
+    fontSize: 60
   },
   columnCenter: {
     display: 'flex',
