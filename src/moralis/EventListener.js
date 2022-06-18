@@ -39,13 +39,11 @@ const EventListener = () => {
   */
   if(sales === 2 && isAuthenticated && account){
     return <div>
-      <MintButton></MintButton>
-      {/* <MusicCard /> */}
+      <MusicCard />
     </div>;
   }else{
     return <div>
-      <MintButton></MintButton>
-      {/* <MusicCard /> */}
+      <MusicCard />
     </div>;
   }
 };

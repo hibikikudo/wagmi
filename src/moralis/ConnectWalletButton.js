@@ -20,14 +20,18 @@ const ConnectWalletButton = ({color = '#333'}) => {
     const [address, setAddress] = useState();
 
   useEffect(() => {
+    if(chainId === "0x1" || chainId === "0x4" || chainId === null){
+      console.log("chainId", chainId)
+    }else{
+      alert("Please connect metamask to Ethereum chain");
+    }
     setAddress((isAuthenticated && account));
-  }, [account, isAuthenticated]);
+  }, [account, isAuthenticated, chainId]);
 
-  const login = async () => {
-  console.log("Authtest", isAuthenticated);
+  const logIn = async () => {
     if (!isAuthenticated || !account) {
 
-      await authenticate({signingMessage: "Log in using Moralis" })
+      await authenticate({signingMessage: "Log in using Moralis"})
         .then((user) => {
           console.log("logged in user:", user);
           if (user) {
@@ -59,7 +63,7 @@ const ConnectWalletButton = ({color = '#333'}) => {
         </Button>
       : <Button
         style={{color: color}}
-        onClick={login}>ConnectWallet</Button>}
+        onClick={logIn}>ConnectWallet</Button>}
     </div>
   );
 };

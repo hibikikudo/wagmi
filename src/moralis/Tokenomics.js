@@ -34,6 +34,7 @@ const Tokenomics = () => {
   useEffect(() => {
     const fetchEvent = async () => {
       const sale_event = await contract.queryFilter(sale_filter);
+      // console.log(sale_event);
       setSeles(sale_event[sale_event.length-1].args[0])
     }
     const fetchSupply = async () => {
