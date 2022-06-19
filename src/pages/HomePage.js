@@ -8,9 +8,9 @@ import Spacer from "../components/Spacer";
 const useStyles = makeStyles({
     back: {
         backgroundColor: '#FFFAF3',
-        minHeight: '100vh',
+        minHeight: '200vh',
         minWidth: '100vw',
-        // position: 'absolute',
+        position: 'absolute',
         zIndex: -1
     }
 })
@@ -18,8 +18,8 @@ const HomePage = () => {
     const classes = useStyles();
     return <>
         <div className={classes.back}>
-        <Header color="#333"/>
-        <Spacer height={100}/>
+        <Header color="#030303" subColor="white"/>
+        <Spacer height={200}/>
         <Grid container justifyContent="center">
             <Grid item xs={12}>
                 <CountDown></CountDown>

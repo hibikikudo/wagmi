@@ -7,52 +7,59 @@ import { Path } from './Routes';
 
 const useStyles = makeStyles({
     headerBar: {
+        position: 'fixed',
         background: 'transparent',
         boxShadow: 'none',
         //color: 'white',
-        // "align-items":"center",
     },
     icon: {
-        //color: 'white',
         width: 30,
         height: "auto",
         fontSize: 20,
     },
     logo: {
-        marginTop: 20,
         fontSize: 20,
     },
     customButton: {
-        //color: 'white'
-        fontSize: 20,
+        height: 40,
+        width: 80,
+        fontSize: 16,
         fontFamily: 'Lato',
         fontWeight: 'bold',
+        color: 'white',
         "box-sizing": "border-box"
+    },
+    customIcon: {
+        fontSize: 16,
+        fontFamily: 'Lato',
+        fontWeight: 'bold',
     },
     wallet: {
         margin: 100,
     },
     buttonMargin: {
-        marginTop: 30,
         marginRight: 30,
         "box-sizing": "border-box"
     },
     iconMargin: {
-        marginTop: 35,
-        padding: 20,
         "box-sizing": "border-box"
     },
-    header: {
-        //position: 'absolute'
+    hederItem: {
+        height:"100px",
+        alignItems:"center",
+    },
+    bottons: {
+        height:"60px",
+        alignItems:"center",
     }
 });
-const Header = ({color = '#333'}) => {
+const Header = ({color, subColor}) => {
     const classes = useStyles();
-    return <div className={classes.header}>
+    return <div>
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" className={classes.headerBar}>
         <Toolbar>
-            <Grid container>
+            <Grid container className={classes.hederItem}>
                 <Grid item xs={2}>
                 <Button
                     href={Path.home}
@@ -66,12 +73,12 @@ const Header = ({color = '#333'}) => {
                         />
                 </Button>
                 </Grid>
-                <Grid item xs={10} container spacing={1} justifyContent="flex-end">
+                <Grid item xs={10} container spacing={1} justifyContent="flex-end" className={classes.bottons}>
                     <Grid item className={classes.buttonMargin}>
                         <Button 
                             href={Path.home}
                             className={classes.customButton}
-                            style={{color: color}}
+                            style={{backgroundColor: color, color: subColor}}
                             >
                           Home
                         </Button>
@@ -80,15 +87,26 @@ const Header = ({color = '#333'}) => {
                         <Button 
                             href={Path.mint}
                             className={classes.customButton}
-                            style={{color: color}}
+                            style={{backgroundColor: color, color: subColor}}
                             >
                           Mint
+                        </Button>
+                    </Grid>
+                    <Grid item className={classes.iconMargin}>
+                        <Button 
+                            href="https://opensea.io/collection/wagmimusic"
+                            target="_blank"
+                            className={classes.customIcon}
+                            style={{color: color}}
+                            >
+                          Opensea
                         </Button>
                     </Grid>
                     <Grid item className={classes.iconMargin}>
                         <Button
                             href="https://twitter.com/hibikilla30"
                             target="_blank"
+                            className={classes.customIcon}
                             style={{color: color}}
                             >
                             <FontAwesomeIcon className={classes.icon} icon={faTwitter} />
@@ -98,13 +116,14 @@ const Header = ({color = '#333'}) => {
                         <Button
                             href="https://discord.gg/GP3hd48s"
                             target="_blank"
+                            className={classes.customIcon}
                             style={{color: color}}
                             >
                             <FontAwesomeIcon className={classes.icon} icon={faDiscord} />
                         </Button>
                     </Grid>
                     <Grid item>
-                        <ConnectWalletButton color={color} className={classes.wallet}/>
+                        <ConnectWalletButton color={subColor} className={classes.wallet}/>
                     </Grid>
                 </Grid>
             </Grid>

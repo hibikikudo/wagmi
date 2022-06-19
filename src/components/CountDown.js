@@ -47,7 +47,7 @@ const useStyles = makeStyles({
     },
     number: {
         fontSize: 100,
-        color: '#333',
+        color: '#030303',
         fontFamily: 'Lato',
         fontWeight: 700,
     },

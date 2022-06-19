@@ -1,14 +1,16 @@
 import useSound from "use-sound";
-import { Button, Card, Grid, Hidden, makeStyles } from "@material-ui/core";
-import { useState } from "react";
+import { FormControlLabel, Button, Card, Checkbox, Grid, Hidden, makeStyles } from "@material-ui/core";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePause, faCirclePlay } from "@fortawesome/free-solid-svg-icons";
 import MintButton from "../moralis/MintButton";
+import Spacer from "./Spacer";
 
 const useStyles = makeStyles({
     card: {
-        width: 600,
-        height: 300,
+        width: "auto",
+        height: "auto",
+        padding: 60,
         borderRadius: 20,
         backgroundColor: 'white',
         color: '#333',
@@ -16,39 +18,95 @@ const useStyles = makeStyles({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+        fontFamily:'Lato',
     },
     image: {
         margin: 10,
-        backgroundColor: 'red',
         display: 'flex', 
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column'
+    },
+    img: {
+        width: 250,
+        height: 250,
+        borderRadius: "8%",
+    },
+    form: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: "3%",
+        marginBottom: "3%",
+    },
+    icon: {
+        width: "auto",
+        height: 80,
+    },
+    transparentBlock: {
+        width: '5%',
+        height: 'auto',
+        //backgroundColor: 'red'
+    },
+    formContent: {
+        fontSize: 14,
+        width: 250
+    },
+    info: {
+        width: 350,
+        height: "auto",
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+    },
+    base: {
+        width: 320,
+        height: "auto",
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 });
+
 const MusicCard = ({artist = "hibikilla", title = "BAD MIND"}) => {
     const classes = useStyles();
+
+    const [checked, setChecked] = useState();
+
+    const handleChange = (e) => {
+        setChecked(e.target.checked)
+    }
 
     return <div>
             <Card raised className={classes.card}>
                 <div className={classes.image}>
-                    <img width={250} height={250} 
-                    src="/image/bad_mind.png" />
+                    <img className={classes.img}
+                    src="/image/bad_mind.png"/>
                 </div>
-                <div>
-                    <div>
-                        <div>再生</div>
-                        <div>
-                            <div>{artist}</div>
-                            <div>{title}</div>
+                <div className={classes.info}>
+                    <div className={classes.base}>
+                        <Button onClick={() => {}}>
+                            <FontAwesomeIcon className={classes.icon} icon={faCirclePlay} />
+                        </Button>
+                        <div className={classes.transparentBlock}></div>
+                        <div className={classes.columnCenter}>
+                            <div style={{fontSize:24}}>{artist}</div>
+                            <div style={{fontSize:36, fontWeight: 'bold'}}>{title}</div>
                         </div>
                     </div>
-                    <div>I acknowledge that I have read and understood our policy prior to buying</div>
-                    <Button onClick={() => {
-
-                    }}>
-                        <FontAwesomeIcon className={classes.icon} icon={faCirclePlay} />
-                    </Button>
+                    <Spacer height={10}/>
+                    <div className={classes.form}>
+                        <Checkbox 
+                            defaultChecked={false}
+                            color="info"
+                            onChange={handleChange}
+                        />
+                        <div className={classes.formContent}>I acknowledge that I have read and understood our policy prior to buying.</div>
+                    </div>
+                    <Spacer height={20}/>
                     <MintButton />
                 </div>
             </Card>

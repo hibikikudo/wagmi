@@ -6,17 +6,14 @@ import { Button, makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles({
   button: {
-    height:50,
-    width: 200,
-    fontFamily: 'Lato',
-    fontWeight:"bold",
+    height:40,
+    width: 160,
     background: "#FFCF00",
     borderRadius: 0,
     boxShadow: '3px 3px 0.1px 0.1px rgba(0, 0, 0, .1)',
-    //color: 'white'
-    marginTop: 30,
+    color: '#333',
     marginLeft: 20,
-    fontSize: 20,
+    fontSize: 12,
   }
 });
 const ConnectWalletButton = ({color = '#333'}) => {
@@ -60,15 +57,13 @@ const ConnectWalletButton = ({color = '#333'}) => {
     <div>
       {isAuthenticated && account ? 
       <Button
-        style={{color: color}}
         className={classes.button}
         onClick={logOut}
         disabled={isAuthenticating}>
-          {getEllipsisTxt(account, 4)}
+          {getEllipsisTxt(account, 4, 4)}
         </Button>
       : <Button
         className={classes.button}
-        style={{color: color}}
         onClick={logIn}>ConnectWallet</Button>}
     </div>
   );

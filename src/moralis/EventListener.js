@@ -28,9 +28,9 @@ const EventListener = () => {
     }
     if(window.ethereum) fetch();
   });
-  console.log("isAuth",isAuthenticated);
-  console.log("account",account);
-  console.log("event",sales);
+  // console.log("isAuth",isAuthenticated);
+  // console.log("account",account);
+  // console.log("event",sales);
 
   /*
   *  sales == 0 => Presale

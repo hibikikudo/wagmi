@@ -1,8 +1,20 @@
-import { Button } from "@material-ui/core";
+import { Button, makeStyles } from "@material-ui/core";
 import { useMoralisCloudFunction, useWeb3ExecuteFunction } from "react-moralis"
 
+const useStyles = makeStyles({
+  button: {
+    height: 50, 
+    width: 120, 
+    color: 'white',
+    fontFamily: 'Lato',
+    fontWeight: 'bold',
+    fontSize: 20
+  }
+});
 
 const MintButton = () => {
+
+  const classes = useStyles();
 
   const options = {
     contractAddress:"0x64B4B8AD8AB87F988d0FE67c38aFE1acd61B9348",
@@ -18,7 +30,7 @@ const MintButton = () => {
 
   return (
   <div>
-    <Button style={{backgroundColor: '#333', color: 'white'}} onClick={() => fetch()} disabled={isFetching}>{data}</Button>
+    <Button className={classes.button} style={{backgroundColor:'#333'}} onClick={() => fetch()} disabled={isFetching}>Mint</Button>
   </div>)
 }
 
