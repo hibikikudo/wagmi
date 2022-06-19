@@ -20,7 +20,7 @@ const useStyles = makeStyles({
         "background-color": "black",
         backgroundSize: "800px 800px",
         backgroundImage: 'url("/image/38.gif")',//`url("https://storage.googleapis.com/studio-design-asset-files/projects/xmaZZplJaR/s-178x157_webp_e1ceac5a-b338-4a18-8f2c-fbf9490beb35.png")`,
-        minHeight:'300vh',
+        minHeight:'180vh',
         minWidth: '100vw',
         position: 'absolute',
         zIndex: -1,

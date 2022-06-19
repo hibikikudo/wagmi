@@ -9,10 +9,11 @@ const useStyles = makeStyles({
         justifyContent: 'center',
         flexDirection: 'row'
     },
-    columnCenter: {
+    columnLeft: {
+        width: 'auto',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'center',
     },
     countRow: {
@@ -22,9 +23,9 @@ const useStyles = makeStyles({
         alignItems: 'center'
     },
     countCol: {
-        width: 200,
-        height: 200,
-        margin: 20,
+        width: 120,
+        height: 140,
+        margin: 5,
         display: 'flex',
         justifyContent: 'center',
         flexDirection: 'column',
@@ -40,16 +41,15 @@ const useStyles = makeStyles({
         justifyContent: 'space-between',
         flexDirection: 'column',
         alignItems: 'center',
-        fontSize: 80,
+        fontSize: 60,
         margin: 5,
         fontFamily: 'Lato',
 
     },
     number: {
-        fontSize: 100,
+        fontSize: 80,
         color: '#030303',
         fontFamily: 'Lato',
-        fontWeight: 700,
     },
     unit: {
         fontSize: 20,
@@ -60,41 +60,29 @@ const useStyles = makeStyles({
 });
 const Time = ({days, hours, minutes, seconds}) => {
     const classes = useStyles();
-    return <div style={{
-        display: 'flex',
-        aligns: 'center',
-        flexDirection: 'column',
-        minWidth: '100vw'}}>
-
-        <div className={classes.columnCenter}>
-            <div className={classes.columnCenter}>
-                <Typography style={{fontSize: 40, marginBottom: 50}}>
-                    New Single will be released soon . . .
-                </Typography>
-            </div>
+    return <div>
             <div className={classes.rowCenter}>
                 <div className={classes.countCol}>
                     <div  className={classes.number}>{days}</div>
                     <div  className={classes.unit}>days</div>
                 </div>
-                <div className={classes.colon}>:</div>
+                {/* <div className={classes.colon}>:</div> */}
                 <div className={classes.countCol}>
                     <div className={classes.number}>{hours}</div>
                     <div className={classes.unit}>hours</div>
                 </div>
-                <div className={classes.colon}>:</div>
+                {/* <div className={classes.colon}>:</div> */}
                 <div className={classes.countCol}>
                     <div className={classes.number}>{minutes}</div>
                     <div className={classes.unit}>minutes</div>
                 </div>
-                <div className={classes.colon}>:</div>
+                {/* <div className={classes.colon}>:</div> */}
                 <div className={classes.countCol}>
                     <div  className={classes.number}>{seconds}</div>
                     <div  className={classes.unit}>seconds</div>
                 </div>
             </div>
         </div>
-    </div>;
 }
 const renderer = ({ days, hours, minutes, seconds, completed }) => {
 

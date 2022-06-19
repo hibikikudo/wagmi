@@ -12,8 +12,8 @@ const useStyles = makeStyles({
         height: "auto",
         padding: 60,
         borderRadius: 20,
-        backgroundColor: 'white',
-        color: '#333',
+        backgroundColor: '#FFFAF3',
+        color: '#030303',
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
@@ -40,9 +40,16 @@ const useStyles = makeStyles({
         marginTop: "3%",
         marginBottom: "3%",
     },
+    // columnCenter: {
+    //     display: 'flex',
+    //     justifyContent: 'center',
+    //     alignItems: 'center',
+    //     flexDirection: 'column',
+    // },
     icon: {
         width: "auto",
         height: 80,
+        color: "#030303"
     },
     transparentBlock: {
         width: '5%',
@@ -54,6 +61,7 @@ const useStyles = makeStyles({
         width: 250
     },
     info: {
+        marginLeft: 40,
         width: 350,
         height: "auto",
         display: 'flex',
@@ -66,7 +74,7 @@ const useStyles = makeStyles({
         height: "auto",
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'center',
     }
 });
@@ -92,7 +100,7 @@ const MusicCard = ({artist = "hibikilla", title = "BAD MIND"}) => {
                             <FontAwesomeIcon className={classes.icon} icon={faCirclePlay} />
                         </Button>
                         <div className={classes.transparentBlock}></div>
-                        <div className={classes.columnCenter}>
+                        <div>
                             <div style={{fontSize:24}}>{artist}</div>
                             <div style={{fontSize:36, fontWeight: 'bold'}}>{title}</div>
                         </div>

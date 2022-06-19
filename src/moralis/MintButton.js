@@ -5,7 +5,7 @@ const useStyles = makeStyles({
   button: {
     height: 50, 
     width: 120, 
-    color: 'white',
+    color: '#030303',
     fontFamily: 'Lato',
     fontWeight: 'bold',
     fontSize: 20
@@ -30,7 +30,7 @@ const MintButton = () => {
 
   return (
   <div>
-    <Button className={classes.button} style={{backgroundColor:'#333'}} onClick={() => fetch()} disabled={isFetching}>Mint</Button>
+    <Button className={classes.button} style={{backgroundColor:'#F4BF1A'}} onClick={() => fetch()} disabled={isFetching}>Mint</Button>
   </div>)
 }
 
