@@ -1,10 +1,22 @@
-import { Button } from "@material-ui/core";
+import { Button, makeStyles } from "@material-ui/core";
 import { useMoralisCloudFunction, useWeb3ExecuteFunction } from "react-moralis"
 
+const useStyles = makeStyles({
+  button: {
+    height: 50, 
+    width: 120, 
+    color: '#030303',
+    fontFamily: 'Lato',
+    fontWeight: 'bold',
+    fontSize: 20
+  }
+});
 
 const MintButton = () => {
 
-  const { data, error, fetch, isFetching, isLoading } = useWeb3ExecuteFunction({
+  const classes = useStyles();
+
+  const options = {
     contractAddress:"0x64B4B8AD8AB87F988d0FE67c38aFE1acd61B9348",
     functionName:"mint",
     abi:[{"inputs":[{"internalType":"uint256","name":"_tokenId","type":"uint256"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"mint","outputs":[],"stateMutability":"nonpayable","type":"function"}],
@@ -12,13 +24,14 @@ const MintButton = () => {
       _tokenId:5,
       _amount:1
     }
-  });
+  };
+
+  const { data, error, fetch, isFetching, isLoading } = useWeb3ExecuteFunction(options);
 
   return (
   <div>
-    <Button style={{backgroundColor: '#333', color: 'white'}} onClick={() => fetch()} disabled={isFetching}>Mint</Button>
+    <Button className={classes.button} style={{backgroundColor:'#F4BF1A'}} onClick={() => fetch()} disabled={isFetching}>Mint</Button>
   </div>)
-
 }
 
 // const WLMintButton = () => {

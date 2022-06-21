@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 dotenv.config(); // setup dotenv
 
 async function main() {
-  const factory = await hre.ethers.getContractFactory("ERC721Drop");
+  const factory = await hre.ethers.getContractFactory("ERC721Mock");
   const option = {
     gasPrice: 25 * 10**9
   }

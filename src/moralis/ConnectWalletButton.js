@@ -6,12 +6,14 @@ import { Button, makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles({
   button: {
-    width: 100,
-    fontFamily: 'Lato',
+    height:40,
+    width: 160,
     background: "#FFCF00",
     borderRadius: 0,
     boxShadow: '3px 3px 0.1px 0.1px rgba(0, 0, 0, .1)',
-    //color: 'white'
+    color: '#333',
+    marginLeft: 20,
+    fontSize: 12,
   }
 });
 const ConnectWalletButton = ({color = '#333'}) => {
@@ -20,13 +22,18 @@ const ConnectWalletButton = ({color = '#333'}) => {
     const [address, setAddress] = useState();
 
   useEffect(() => {
+    if(chainId === "0x1" || chainId === "0x4" || chainId === null){
+      console.log("chainId", chainId)
+    }else{
+      alert("Please connect metamask to Ethereum chain");
+    }
     setAddress((isAuthenticated && account));
-  }, [account, isAuthenticated]);
+  }, [account, isAuthenticated, chainId]);
 
-  const login = async () => {
+  const logIn = async () => {
     if (!isAuthenticated || !account) {
 
-      await authenticate({signingMessage: "Log in using Moralis" })
+      await authenticate({signingMessage: "Log in using Moralis"})
         .then((user) => {
           console.log("logged in user:", user);
           if (user) {
@@ -50,15 +57,14 @@ const ConnectWalletButton = ({color = '#333'}) => {
     <div>
       {isAuthenticated && account ? 
       <Button
-        style={{color: color}}
         className={classes.button}
         onClick={logOut}
         disabled={isAuthenticating}>
-          {getEllipsisTxt(account, 3)}
+          {getEllipsisTxt(account, 4, 4)}
         </Button>
       : <Button
-        style={{color: color}}
-        onClick={login}>ConnectWallet</Button>}
+        className={classes.button}
+        onClick={logIn}>ConnectWallet</Button>}
     </div>
   );
 };

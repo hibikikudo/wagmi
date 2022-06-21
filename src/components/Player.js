@@ -3,9 +3,11 @@ import { Button, Card, Grid, Hidden, makeStyles } from "@material-ui/core";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePause, faCirclePlay } from "@fortawesome/free-solid-svg-icons";
+import { getEllipsisTxt } from "../helpers/formatters";
 
 const useStyles = makeStyles({
     card: {
+        height: 70,
         width: 400,
         borderRadius: 10,
         backgroundColor: '#4A434D',
@@ -35,21 +37,24 @@ const useStyles = makeStyles({
         position: 'absolute',
     },
     transparentBlock: {
-        width: 180,
-        height: 50,
+        width: '30%',
+        height: 'auto',
         //backgroundColor: 'red'
     },
     icon: {
-        fontSize: 50,
+        fontSize: 40,
         color: 'white'
     },
     animationText: {
+        width:'50%',
+        fontFamily:'Lato',
+        fontWeight:'bold',
         overflow: 'hidden'
     },
     playingMusicDisc: {
         display: 'inline-block',
         whiteSpace: 'nowrap',
-        animation: `$text_scroll 5s linear infinite`
+        animation: `$text_scroll 8s linear infinite`
     },
     notPlayingMusicDisc: {
         display: 'inline-block',
@@ -60,6 +65,21 @@ const useStyles = makeStyles({
         '100%': { transform: 'translateX(-100%)'}
     }
 });
+
+const MusicTitle = ({isPlaying}) => {
+    const classes = useStyles();
+    const title = "Hibikilla - Bad Mind - featuring xxx"
+
+    if(isPlaying){
+        return <div className={classes.playingMusicDisc}>
+            {title}
+        </div>
+    }else{
+        return <div className={classes.notPlayingMusicDisc}>
+            {getEllipsisTxt(title, 25, 0)}
+        </div>
+    }
+}
 const Player = () => {
     const classes = useStyles();
     const [isPlaying, setIsPlaying] = useState(false);
@@ -77,9 +97,7 @@ const Player = () => {
 
                 </div>
                 <div className={classes.animationText}>
-                    <div className={isPlaying ? classes.playingMusicDisc : classes.notPlayingMusicDisc}>
-                        Hibikilla ~ Bad Mind ~
-                    </div>
+                    <MusicTitle isPlaying={isPlaying}></MusicTitle>
                 </div>
                 <Button onClick={() => {
                     if (isPlaying) {

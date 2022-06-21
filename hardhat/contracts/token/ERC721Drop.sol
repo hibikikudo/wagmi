@@ -66,7 +66,7 @@ contract ERC721Drop is ERC721, Ownable {
     bytes32[] calldata _merkleProof
   ) public {
     require(sales == true, "NFTs are not now on sale");
-    require(!whitelistClaimed[recipient], "Address already claimed");
+    require(!whitelistClaimed[_msgSender()], "Address already claimed");
     require(tokenSupply < MAX_AMOUNT_OF_MINT, "Max supply reached");
 
     bytes32 leaf = keccak256(abi.encodePacked(_msgSender()));
