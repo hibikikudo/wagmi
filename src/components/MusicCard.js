@@ -1,10 +1,11 @@
 import useSound from "use-sound";
 import { FormControlLabel, Button, Card, Checkbox, Grid, Hidden, makeStyles } from "@material-ui/core";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePause, faCirclePlay } from "@fortawesome/free-solid-svg-icons";
 import MintButton from "../moralis/MintButton";
 import Spacer from "./Spacer";
+import { MusicContext } from "../provider/MusicProvider";
 
 const useStyles = makeStyles({
     card: {
@@ -103,6 +104,7 @@ const MintButtons = ({valid}) => {
 
 const MusicCard = ({artist = "hibikilla", title = "BAD MIND", valid}) => {
     const classes = useStyles();
+    const { isPlaying, onPlay, onStop } = useContext(MusicContext);
 
     const [checked, setChecked] = useState();
 
@@ -118,8 +120,17 @@ const MusicCard = ({artist = "hibikilla", title = "BAD MIND", valid}) => {
                 </div>
                 <div className={classes.info}>
                     <div className={classes.base}>
-                        <Button onClick={() => {}}>
-                            <FontAwesomeIcon className={classes.icon} icon={faCirclePlay} />
+                        <Button onClick={() => {
+                            if (isPlaying) {
+                                onStop();
+                            } else {
+                                onPlay();
+                            }
+                        }}>
+                            {isPlaying ?
+                                <FontAwesomeIcon className={classes.icon} icon={faCirclePause} /> : 
+                                <FontAwesomeIcon className={classes.icon} icon={faCirclePlay} />
+                            }
                         </Button>
                         <div className={classes.transparentBlock}></div>
                         <div>

@@ -1,9 +1,10 @@
 import useSound from "use-sound";
 import { Button, Card, Grid, Hidden, makeStyles } from "@material-ui/core";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePause, faCirclePlay } from "@fortawesome/free-solid-svg-icons";
 import { getEllipsisTxt } from "../helpers/formatters";
+import { MusicContext } from "../provider/MusicProvider";
 
 const useStyles = makeStyles({
     card: {
@@ -66,9 +67,9 @@ const useStyles = makeStyles({
     }
 });
 
-const MusicTitle = ({isPlaying}) => {
+const MusicTitle = () => {
+    const { isPlaying, title } = useContext(MusicContext);
     const classes = useStyles();
-    const title = "Hibikilla - Bad Mind - featuring xxx"
 
     if(isPlaying){
         return <div className={classes.playingMusicDisc}>
@@ -82,8 +83,7 @@ const MusicTitle = ({isPlaying}) => {
 }
 const Player = () => {
     const classes = useStyles();
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [play, {stop, pause}] = useSound('/music/bad_mind.mp3');
+    const { isPlaying, onPlay, onStop } = useContext(MusicContext);
 
     return <div>
             <Card raised className={classes.card}>
@@ -101,11 +101,9 @@ const Player = () => {
                 </div>
                 <Button onClick={() => {
                     if (isPlaying) {
-                        pause();
-                        setIsPlaying(false);
+                        onStop();
                     } else {
-                        play();
-                        setIsPlaying(true);
+                        onPlay();
                     }
                 }}>
                     {isPlaying ?

@@ -60,13 +60,10 @@ const MintPage = () => {
 
     const classes = useStyles();
     return <div>
-        <div style={{position:'fixed', left: 10, bottom: 10}}> 
-                <Player />
-        </div>
         <div className={classes.back}/>
         <Header color="white" subColor="#030303"/>
         <div className={classes.columnCenter}>
-            <Spacer height={750}/>
+            <Spacer height={650}/>
             <div className={classes.top} style={{opacity: opacity}}>
                 <div className={classes.title}>We are ganna make it !!</div>
                 <Spacer height={20}/>   
