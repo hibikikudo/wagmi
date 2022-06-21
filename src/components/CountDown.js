@@ -44,10 +44,9 @@ const useStyles = makeStyles({
         fontSize: 60,
         margin: 5,
         fontFamily: 'Lato',
-
     },
     number: {
-        fontSize: 80,
+        fontSize: 60,
         color: '#030303',
         fontFamily: 'Lato',
     },

@@ -39,11 +39,11 @@ const EventListener = () => {
   */
   if(sales === 2 && isAuthenticated && account){
     return <div>
-      <MusicCard />
+      <MusicCard valid={true}/>
     </div>;
   }else{
     return <div>
-      <MusicCard />
+      <MusicCard valid={false}/>
     </div>;
   }
 };

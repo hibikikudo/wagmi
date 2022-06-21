@@ -76,10 +76,32 @@ const useStyles = makeStyles({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
+    },
+    invalid: {
+        height: 50, 
+        width: 120, 
+        color: '#030303',
+        fontFamily: 'Lato',
+        fontWeight: 'bold',
+        fontSize: 20
     }
 });
 
-const MusicCard = ({artist = "hibikilla", title = "BAD MIND"}) => {
+const MintButtons = ({valid}) => {
+    const classes = useStyles();
+    if(valid){
+        return <div>
+            <MintButton/>
+        </div>
+    }else{
+        return <div className={classes.invalid}>
+            Mint
+        </div>
+    }
+    
+}
+
+const MusicCard = ({artist = "hibikilla", title = "BAD MIND", valid}) => {
     const classes = useStyles();
 
     const [checked, setChecked] = useState();
@@ -115,7 +137,7 @@ const MusicCard = ({artist = "hibikilla", title = "BAD MIND"}) => {
                         <div className={classes.formContent}>I acknowledge that I have read and understood our policy prior to buying.</div>
                     </div>
                     <Spacer height={20}/>
-                    <MintButton />
+                    <MintButtons />
                 </div>
             </Card>
 
