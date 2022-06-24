@@ -40,7 +40,7 @@ const useStyles = makeStyles({
         fontSize: 28
     },
     description: {
-        fontSize: 16
+        fontSize: 14
     }
 })
 const MintPage = () => {
@@ -66,9 +66,9 @@ const MintPage = () => {
         <div className={classes.back}/>
         <Header color="white" subColor="#030303"/>
         <div className={classes.columnCenter}>
-            <Spacer height={750}/>
+            <Spacer height={700}/>
             <div className={classes.top} style={{opacity: opacity}}>
-                <div className={classes.title}>We are ganna make it !!</div>
+                <div className={classes.title}>We are gonna make it !!</div>
                 <Spacer height={20}/>   
                 <div className={classes.subtitle}>This is our policy</div>    
                 <Spacer height={30}/>  
@@ -92,6 +92,9 @@ const MintPage = () => {
                 </div>  
                 <div className={classes.description}>
                     The metadata of this token is hosted in IPFS.This token is not a promise of future value.
+                </div>  
+                <div className={classes.description}>
+                    This token is not a promise of future value.
                 </div>  
             </div>
         </div>

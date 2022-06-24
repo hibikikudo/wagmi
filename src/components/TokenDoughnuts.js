@@ -148,18 +148,18 @@ const SalesLabels = ({sales}) => {
   //   ],
   // };
 
-  // const graphdata_pre = {
-  //   datasets: [
-  //    {
-  //      data: [100],
-  //      backgroundColor: ['#F4E8D6'],
-  //      borderWidth: 1,
-  //      borderRadius: 1,
-  //      radius:200,
-  //      cutout:"98%"
-  //    },
-  //   ],
-  // };
+  const graphdata_pre = {
+    datasets: [
+     {
+       data: [100],
+       backgroundColor: ['#F4E8D6'],
+       borderWidth: 1,
+       borderRadius: 1,
+       radius:200,
+       cutout:"98%"
+     },
+    ],
+  };
 
   const graphdata_presale = {
     datasets: [
@@ -205,35 +205,44 @@ const SalesLabels = ({sales}) => {
       display: false,
     },
   };
-
-  if(sales === 0){
-    return <div>
-    <StyledDoughnuts
-      data={graphdata_presale} 
-      options={doughnutOptions} />
-    <SalesLabel label="presale" progress="true" degree1="-45" degree2="45"/>
-    <SalesLabel label="public sale" progress="false" degree1="0" degree2="0"/>
-    <SalesLabel label="end of sale" progress="false" degree1="45" degree2="-45"/>
-  </div>
-  }else if(sales === 1){
-    return <div>
-    <StyledDoughnuts
-      data={graphdata_public} 
-      options={doughnutOptions} />
-    <SalesLabel label="presale" progress="true" degree1="-45" degree2="45"/>
-    <SalesLabel label="public sale" progress="true" degree1="0" degree2="0"/>
-    <SalesLabel label="end of sale" progress="false" degree1="45" degree2="-45"/>
-  </div>
-  }else{
-    return <div>
-    <StyledDoughnuts
-      data={graphdata_end} 
-      options={doughnutOptions} />
-    <SalesLabel label="presale" progress="true" degree1="-45" degree2="45"/>
-    <SalesLabel label="public sale" progress="true" degree1="0" degree2="0"/>
-    <SalesLabel label="end of sale" progress="true" degree1="45" degree2="-45"/>
-  </div>
-  }
+  switch(sales){
+    case 0:
+        return <div>
+        <StyledDoughnuts
+          data={graphdata_presale} 
+          options={doughnutOptions} />
+        <SalesLabel label="presale" progress="true" degree1="-45" degree2="45"/>
+        <SalesLabel label="public sale" progress="false" degree1="0" degree2="0"/>
+        <SalesLabel label="end of sale" progress="false" degree1="45" degree2="-45"/>
+      </div>
+    case 1:
+        return <div>
+        <StyledDoughnuts
+          data={graphdata_public} 
+          options={doughnutOptions} />
+        <SalesLabel label="presale" progress="true" degree1="-45" degree2="45"/>
+        <SalesLabel label="public sale" progress="true" degree1="0" degree2="0"/>
+        <SalesLabel label="end of sale" progress="false" degree1="45" degree2="-45"/>
+      </div>
+    case 2:
+        return <div>
+        <StyledDoughnuts
+          data={graphdata_end} 
+          options={doughnutOptions} />
+        <SalesLabel label="presale" progress="true" degree1="-45" degree2="45"/>
+        <SalesLabel label="public sale" progress="true" degree1="0" degree2="0"/>
+        <SalesLabel label="end of sale" progress="true" degree1="45" degree2="-45"/>
+      </div>
+    default:
+        return <div>
+        <StyledDoughnuts
+          data={graphdata_pre} 
+          options={doughnutOptions} />
+        <SalesLabel label="presale" progress="false" degree1="-45" degree2="45"/>
+        <SalesLabel label="public sale" progress="false" degree1="0" degree2="0"/>
+        <SalesLabel label="end of sale" progress="false" degree1="45" degree2="-45"/>
+      </div>
+}
 };
 
 const SalesLabel = ({label, progress, degree1, degree2}) => {

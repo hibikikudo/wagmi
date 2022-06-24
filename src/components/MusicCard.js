@@ -3,8 +3,9 @@ import { FormControlLabel, Button, Card, Checkbox, Grid, Hidden, makeStyles } fr
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePause, faCirclePlay } from "@fortawesome/free-solid-svg-icons";
-import MintButton from "../moralis/MintButton";
+import {MintButton, WLMintButton} from "../moralis/MintButton";
 import Spacer from "./Spacer";
+import { useMoralisQuery } from "react-moralis";
 
 const useStyles = makeStyles({
     card: {
@@ -40,12 +41,6 @@ const useStyles = makeStyles({
         marginTop: "3%",
         marginBottom: "3%",
     },
-    // columnCenter: {
-    //     display: 'flex',
-    //     justifyContent: 'center',
-    //     alignItems: 'center',
-    //     flexDirection: 'column',
-    // },
     icon: {
         width: "auto",
         height: 80,
@@ -54,7 +49,6 @@ const useStyles = makeStyles({
     transparentBlock: {
         width: '5%',
         height: 'auto',
-        //backgroundColor: 'red'
     },
     formContent: {
         fontSize: 14,
@@ -84,24 +78,54 @@ const useStyles = makeStyles({
         fontFamily: 'Lato',
         fontWeight: 'bold',
         fontSize: 20
-    }
+    },
+    button: {
+        height: 50, 
+        width: 120, 
+        color: '#030303',
+        fontFamily: 'Lato',
+        fontWeight: 'bold',
+        fontSize: 20,
+        backgroundColor: "#716E63"
+      }
 });
 
-const MintButtons = ({valid}) => {
+const MintButtons = ({valid, sales, checked}) => {
     const classes = useStyles();
-    if(valid){
-        return <div>
-            <MintButton/>
-        </div>
+    
+    const { data } = useMoralisQuery(
+        "AllowList",
+        (query) => query,
+        []
+    )
+
+    if(checked && valid && data){
+        /*
+        *  sales == 0 => Presale
+        *  sales == 1 => PublicSale
+        *  sales == 2 => Suspended
+        */
+        switch(sales){
+            case 0:
+                return <div>
+                <WLMintButton data={data}/>
+                </div>
+            case 1:
+                return <div>
+                <MintButton/>
+                </div>
+            case 2:
+                return <Button className={classes.button} style={{backgroundColor: "#716E63"}} onClick={()=>{alert("Mint sale is suspended!")}} >Mint</Button>
+            default:
+                return <Button className={classes.button} style={{backgroundColor: "#716E63"}} onClick={()=>{alert("mint sale has yet to start!", sales)}} >Mint</Button>
+        }
     }else{
-        return <div className={classes.invalid}>
-            Mint
-        </div>
+        return <Button className={classes.button} style={{backgroundColor: "#716E63"}} onClick={()=>{alert("You cannot mint because checkBox is not checked or you are not whitelisted!")}} >Mint</Button>
     }
     
 }
 
-const MusicCard = ({artist = "hibikilla", title = "BAD MIND", valid}) => {
+const MusicCard = ({artist = "hibikilla", title = "BAD MIND", valid, sales}) => {
     const classes = useStyles();
 
     const [checked, setChecked] = useState();
@@ -131,13 +155,13 @@ const MusicCard = ({artist = "hibikilla", title = "BAD MIND", valid}) => {
                     <div className={classes.form}>
                         <Checkbox 
                             defaultChecked={false}
-                            color="info"
+                            color="secondary"
                             onChange={handleChange}
                         />
                         <div className={classes.formContent}>I acknowledge that I have read and understood our policy prior to buying.</div>
                     </div>
                     <Spacer height={20}/>
-                    <MintButtons />
+                    <MintButtons valid={valid} checked={checked} sales={sales}/>
                 </div>
             </Card>
 

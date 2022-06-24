@@ -66,7 +66,7 @@ const HomePage = () => {
     return <>
         <div className={classes.back}>
         <Header color="#030303" subColor="white"/>
-        <Spacer height={180}/>
+        <Spacer height={150}/>
         <div className={classes.columnCenter}>
             <Typography style={{fontSize: 40, marginBottom: 10}}>
                 New Single will be released soon . . . !!

@@ -3,17 +3,34 @@ import { useMoralis } from "react-moralis";
 import { getEllipsisTxt } from "../helpers/formatters";
 import { useState } from "react";
 import { Button, makeStyles } from "@material-ui/core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleXmark, faWallet } from "@fortawesome/free-solid-svg-icons";
 
 const useStyles = makeStyles({
   button: {
     height:40,
-    width: 160,
+    width: 180,
     background: "#FFCF00",
     borderRadius: 0,
     boxShadow: '3px 3px 0.1px 0.1px rgba(0, 0, 0, .1)',
-    color: '#333',
     marginLeft: 20,
     fontSize: 12,
+    display: 'flex',
+    justifyContent:'flex-start',
+    "&:hover": {
+      background: "#B58B07"
+    },
+  },
+  icon: {
+    color: "#C89B0E",
+    marginLeft: '5%',
+    marginRight: '5%',
+  },
+  address: {
+    color: "#333",
+    width:120,
+    display: 'flex',
+    justifyContent:'center',
   }
 });
 const ConnectWalletButton = ({color = '#333'}) => {
@@ -60,11 +77,20 @@ const ConnectWalletButton = ({color = '#333'}) => {
         className={classes.button}
         onClick={logOut}
         disabled={isAuthenticating}>
-          {getEllipsisTxt(account, 4, 4)}
+          <FontAwesomeIcon className={classes.icon} icon={faWallet} />
+          <div className={classes.transparentBlock}></div>
+          <div className={classes.address}>
+            {getEllipsisTxt(account, 4, 4)}
+          </div>
         </Button>
       : <Button
         className={classes.button}
-        onClick={logIn}>ConnectWallet</Button>}
+        onClick={logIn}>
+          <FontAwesomeIcon className={classes.icon} icon={faWallet} />
+          <div className={classes.address}>
+            ConnectWallet
+          </div>
+        </Button>}
     </div>
   );
 };
