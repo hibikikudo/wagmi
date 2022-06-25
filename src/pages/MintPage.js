@@ -41,6 +41,13 @@ const useStyles = makeStyles({
     },
     description: {
         fontSize: 14
+    },
+    descriptionBoard: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        textShadow: '0px 0px 2px  rgba(0, 0, 0, 1)'
     }
 })
 const MintPage = () => {
@@ -63,17 +70,18 @@ const MintPage = () => {
         <div className={classes.back}/>
         <Header color="white" subColor="#030303"/>
         <div className={classes.columnCenter}>
-            <Spacer height={650}/>
+            <Spacer height={750}/>
             <div className={classes.top} style={{opacity: opacity}}>
                 <div className={classes.title}>We are gonna make it !!</div>
                 <Spacer height={20}/>   
                 <div className={classes.subtitle}>This is our policy</div>    
                 <Spacer height={30}/>  
+                <div className={classes.descriptionBoard}>
                 <div className={classes.description}>
                     このトークンは、イーサリアムチェーン上で機能するERC721規格のNFTです。
                 </div>  
                 <div className={classes.description}>
-                    このトークンを買うと、アーティストのディスコードコミュニティに参加することができます。
+                    このトークンをMintすると、アーティストのディスコードコミュニティに参加することができます。
                 </div>  
                 <div className={classes.description}>
                     このトークンの画像および音楽データはすべてIPFSに保存されています。
@@ -93,6 +101,7 @@ const MintPage = () => {
                 <div className={classes.description}>
                     This token is not a promise of future value.
                 </div>  
+                </div>
             </div>
         </div>
         <div className={classes.columnCenter}>

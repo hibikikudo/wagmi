@@ -10,7 +10,7 @@ const useStyles = makeStyles({
   button: {
     height:40,
     width: 180,
-    background: "#FFCF00",
+    background: "#7547D7",
     borderRadius: 0,
     boxShadow: '3px 3px 0.1px 0.1px rgba(0, 0, 0, .1)',
     marginLeft: 20,
@@ -18,17 +18,17 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent:'flex-start',
     "&:hover": {
-      background: "#B58B07"
+      background: "#4911BF"
     },
   },
   icon: {
-    color: "#C89B0E",
+    color: "white",
     marginLeft: '5%',
     marginRight: '5%',
   },
   address: {
-    color: "#333",
-    width:120,
+    color: "white",
+    width:130,
     display: 'flex',
     justifyContent:'center',
   }
@@ -39,7 +39,7 @@ const ConnectWalletButton = ({color = '#333'}) => {
     const [address, setAddress] = useState();
 
   useEffect(() => {
-    if(chainId === "0x1" || chainId === "0x4" || chainId === null){
+    if(chainId === "0x1" || chainId === "0x4" || chainId === "0x89" || chainId === null){
       console.log("chainId", chainId)
     }else{
       alert("Please connect metamask to Ethereum chain");

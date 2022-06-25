@@ -97,7 +97,7 @@ const renderer = ({ days, hours, minutes, seconds, completed }) => {
 const CountDown = () => {
     return <div>
         <Countdown
-            date={new Date('June 25, 2022 00:00:00')}
+            date={new Date('June 28, 2022 00:00:00')}
             renderer={renderer}
         >
         </Countdown>

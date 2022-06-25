@@ -92,6 +92,15 @@ const Header = ({color, subColor}) => {
                           Mint
                         </Button>
                     </Grid>
+                    <Grid item className={classes.buttonMargin}>
+                        <Button 
+                            href={Path.app}
+                            className={classes.customButton}
+                            style={{backgroundColor: color, color: subColor}}
+                            >
+                          App
+                        </Button>
+                    </Grid>
                     <Grid item className={classes.iconMargin}>
                         <Button 
                             href="https://opensea.io/collection/wagmimusic"

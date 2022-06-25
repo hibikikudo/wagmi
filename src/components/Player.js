@@ -11,7 +11,7 @@ const useStyles = makeStyles({
         height: 70,
         width: 400,
         borderRadius: 10,
-        backgroundColor: '#4A434D',
+        backgroundColor: '#2F2C37',
         color: 'white',
         display: 'flex',
         flexDirection: 'row',

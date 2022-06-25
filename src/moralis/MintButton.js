@@ -35,7 +35,7 @@ const MintButton = () => {
     params:{
       _tokenId:5,
       _amount:1
-    }
+    },
   };
 
   const { data, error, fetch, isFetching, isLoading } = useWeb3ExecuteFunction(options);
