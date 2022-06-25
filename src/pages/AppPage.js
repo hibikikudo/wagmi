@@ -64,9 +64,9 @@ const useStyles = makeStyles({
     fontSize: 24
   },
   card: {
-    width: 800,
+    width: 700,
     height: 500,
-    padding: 60,
+    padding: 40,
     borderRadius: 20,
     backgroundColor: '#2F2C37',
     color: 'white',
