@@ -43,7 +43,7 @@ const Tokenomics = () => {
     }
     if(window.ethereum) fetchEvent();
     fetchSupply();
-  }, []);
+  }, [data]);
 
   return <div>
     <TokenDoughnuts sales = {sales} supply={supply} minted={data}></TokenDoughnuts>

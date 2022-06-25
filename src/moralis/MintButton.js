@@ -1,5 +1,10 @@
 import { Button, makeStyles } from "@material-ui/core";
-import { useMoralisCloudFunction, useWeb3ExecuteFunction } from "react-moralis"
+import { useMoralis, useMoralisQuery, useMoralisCloudFunction, useWeb3ExecuteFunction, useNewMoralisObject } from "react-moralis";
+import keccak256 from "keccak256";
+import { Buffer } from 'buffer';
+import { MerkleTree } from 'merkletreejs'
+
+window.Buffer = Buffer;
 
 const useStyles = makeStyles({
   button: {
@@ -8,7 +13,14 @@ const useStyles = makeStyles({
     color: '#030303',
     fontFamily: 'Lato',
     fontWeight: 'bold',
-    fontSize: 20
+    fontSize: 20,
+    backgroundColor:'#F4BF1A',
+    "&:hover": {
+      background: "#B58B07"
+    },
+    // "&:active": {
+    //   background: "aqua"
+    // }
   }
 });
 
@@ -30,31 +42,46 @@ const MintButton = () => {
 
   return (
   <div>
-    <Button className={classes.button} style={{backgroundColor:'#F4BF1A'}} onClick={() => fetch()} disabled={isFetching}>Mint</Button>
+    <Button className={classes.button} onClick={() => fetch()} disabled={isFetching}>Mint</Button>
   </div>)
 }
 
-// const WLMintButton = () => {
+const WLMintButton = (data) => {
 
-//   const { whitelistAddress, error, isLoading } = useMoralisCloudFunction("getWL", {
+  const classes = useStyles();
 
-//   });
+  const { account } = useMoralis();
 
-//   const { data, err, fetch, isFetching, isLoad } = useWeb3ExecuteFunction({
-//     contractAddress:"0x64B4B8AD8AB87F988d0FE67c38aFE1acd61B9348",
-//     functionName:"mint",
-//     abi:[{"inputs":[{"internalType":"uint256","name":"_tokenId","type":"uint256"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"mint","outputs":[],"stateMutability":"nonpayable","type":"function"}],
-//     params:{
-//       _tokenId:5,
-//       _amount:1,
-//       _MerklePloof:whitelistAddress
-//     }
-//   });
+  const getHexPloof = (data) => {
+    let leafNodes, merkleTree, clamingHashedAddress, hexPloof;
 
-//   return (
-//   <div>
-//     <Button onClick={() => fetch()} disabled={isFetching}>Mint</Button>
-//   </div>)
+    leafNodes = data.map(addr => keccak256(addr));
+    merkleTree = new MerkleTree(leafNodes, keccak256, { sortPairs: true});
+    // console.log(merkleTree.toString());
+    // console.log(keccak256(account));
+    const testAccount = '0x5DE4Fc4548ba286EB29173630618D4Ef5E489Bd6';
+    clamingHashedAddress = keccak256(testAccount);
+    return hexPloof = merkleTree.getHexProof(clamingHashedAddress);
+    // console.log("Merkle Ploof\n", hexPloof);
+  }
 
-// }
-export default MintButton
+  const hexPloof = getHexPloof(data.data[0].attributes.allowlist);
+  console.log('merklePloof\n',hexPloof);
+
+  const options = {
+    contractAddress:"0x64B4B8AD8AB87F988d0FE67c38aFE1acd61B9348",
+    functionName:"mint",
+    abi:[{"inputs":[{"internalType":"uint256","name":"_tokenId","type":"uint256"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"mint","outputs":[],"stateMutability":"nonpayable","type":"function"}],
+    params:{
+      _tokenId:5,
+      _amount:1
+    }
+  };
+  const { fetch } = useWeb3ExecuteFunction(options);
+
+  return (
+  <div>
+    <Button className={classes.button} onClick={fetch}>Mint</Button>
+  </div>)
+}
+export {MintButton, WLMintButton};

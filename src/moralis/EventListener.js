@@ -25,9 +25,10 @@ const EventListener = () => {
     const fetch = async () => {
       const sale_event = await contract.queryFilter(sale_filter);
       setSeles(sale_event[sale_event.length-1].args[0])
+      console.log("sales",sales)
     }
     if(window.ethereum) fetch();
-  });
+  }, [sales]);
   // console.log("isAuth",isAuthenticated);
   // console.log("account",account);
   // console.log("event",sales);
@@ -37,13 +38,13 @@ const EventListener = () => {
   *  sales == 1 => PublicSale
   *  sales == 2 => Suspended
   */
-  if(sales === 2 && isAuthenticated && account){
+  if(isAuthenticated && account){
     return <div>
-      <MusicCard valid={true}/>
+      <MusicCard sales={sales} valid={true}/>
     </div>;
   }else{
     return <div>
-      <MusicCard valid={false}/>
+      <MusicCard sales={sales} valid={false}/>
     </div>;
   }
 };
