@@ -25,13 +25,13 @@ const useStyles = makeStyles({
     countCol: {
         width: 120,
         height: 140,
-        margin: 5,
+        margin: 10,
         display: 'flex',
         justifyContent: 'center',
         flexDirection: 'column',
         alignItems: 'center',
-        backgroundColor: '#F2EBE4',
-        boxShadow: 'inset 0px 2px 5px 0px rgba(0, 0, 0, 0.2)',
+        backgroundColor: '#030303',
+        boxShadow: '0px 2px 5px 0px rgba(0, 0, 0, 0.8)',
         borderRadius: "15%",
         fontSize: 30,
         color: '#F2EBE4',
@@ -47,12 +47,10 @@ const useStyles = makeStyles({
     },
     number: {
         fontSize: 60,
-        color: '#030303',
         fontFamily: 'Lato',
     },
     unit: {
         fontSize: 20,
-        color: '#333',
         fontFamily: 'Lato',
         fontWeight: 'bold'
     }

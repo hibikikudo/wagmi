@@ -96,8 +96,8 @@ const useStyles = makeStyles({
       width: 250
   },
   info: {
-      marginLeft: 70,
-      marginRight: 30,
+      marginLeft: 50,
+      marginRight: 10,
       width: "auto",
       height: "auto",
       display: 'flex',
@@ -212,7 +212,7 @@ const AppPage = () => {
   const classes = useStyles();
   const [ ToETH, setToETH ] = useState();
   const [ Confirmed, setConfirmed ] = useState(false);
-  const [tokenId, setTokenId] = useState();
+  const [tokenId, setTokenId] = useState(1);
 
   const handleChange = (event) => {
     setTokenId(event.target.value);
@@ -258,7 +258,6 @@ const AppPage = () => {
               <div className={classes.rowCenter}>
                 <Jacket tokenId={tokenId}/>
                 <div className={classes.info}>
-                    
                     <div className={classes.base}>
                         <div className={classes.from}>
                           <div style={{fontSize:22, marginBottom: '4%'}}>from</div>
