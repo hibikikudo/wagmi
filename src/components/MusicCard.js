@@ -30,8 +30,8 @@ const useStyles = makeStyles({
         flexDirection: 'column'
     },
     img: {
-        width: 250,
-        height: 250,
+        width: 300,
+        height: 300,
         borderRadius: "8%",
     },
     form: {
