@@ -123,7 +123,7 @@ const Header = ({color, subColor}) => {
                     </Grid>
                     <Grid item className={classes.iconMargin}>
                         <Button
-                            href="https://discord.gg/GP3hd48s"
+                            href="https://discord.com/invite/yGwTRWNssq"
                             target="_blank"
                             className={classes.customIcon}
                             style={{color: color}}

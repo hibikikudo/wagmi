@@ -1,9 +1,37 @@
 import { Grid, makeStyles, Typography } from "@material-ui/core";
 import AboutUs from "../components/AboutUs";
 import Tokenomics from "../moralis/Tokenomics";
-import CountDown from "../components/CountDown";
+import SalesInfo from "../components/SalesInfo";
 import Header from "../components/Header";
 import Spacer from "../components/Spacer";
+import { ethers } from "ethers";
+// Arrange later
+import contractAbi from "../moralis/abi.json"
+import { faListSquares } from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useState } from 'react';
+import { useMoralis } from "react-moralis";
+import React from "react";
+import { useMoralisWeb3Api, useMoralisWeb3ApiCall } from "react-moralis";
+import TokenDoughnuts from "../components/TokenDoughnuts";
+
+// const contractAddress = process.env.CONTRACT_ADDRESS
+const contractAddress = "0xECc866f9D76ef66A92D3BDb61F558582b56Cdeb1";
+let web3Provider, contract, sale_filter;
+const maxSupply = 48;
+
+const options = {
+  chain: "rinkeby",
+  address: contractAddress,
+  function_name: "tokenSupply",
+  abi: [{"inputs":[],"name":"tokenSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}],
+  params: {}
+};
+
+if(window.ethereum){
+  web3Provider = new ethers.providers.Web3Provider(window.ethereum);
+  contract = new ethers.Contract(contractAddress, contractAbi, web3Provider);
+  sale_filter = contract.filters.NowOnSale(null);
+}
 
 const useStyles = makeStyles({
     back: {
@@ -14,7 +42,7 @@ const useStyles = makeStyles({
     },
     back2: {
         backgroundColor: '#FFFAF3',
-        minHeight: '200vh',
+        minHeight: '290vh',
         minWidth: '100vw',
         zIndex: -3
     },
@@ -113,14 +141,37 @@ const useStyles = makeStyles({
 })
 const HomePage = () => {
     const classes = useStyles();
+
+    const { native } = useMoralisWeb3Api();
+    const { isAuthenticated, account } = useMoralis();
+    const [sales, setSeles] = useState();
+    const [supply, setSupply] = useState(true);
+    const { fetch, data, error, isLoading } = useMoralisWeb3ApiCall(native.runContractFunction,{...options});
+
+    useEffect(() => {
+        const fetchEvent = async () => {
+        const sale_event = await contract.queryFilter(sale_filter);
+        setSeles(sale_event[sale_event.length-1].args[0])
+        }
+        const fetchSupply = async () => {
+        fetch();
+        }
+        if(window.ethereum) fetchEvent();
+        fetchSupply();
+    }, [account]);
+
+    useEffect(() => {
+        if(data===`${maxSupply}`){
+            setSupply(false);
+            console.log("Token Supply reached max amount");
+        }
+    }, [data])
+
     return <>
         <div className={classes.back}>
         <Header color="#030303" subColor="white"/>
         <Spacer height={75}/>
         <div className={classes.columnCenter}>
-            {/* <Typography style={{fontSize: 40, marginBottom: 10, zIndex: 3}}>
-                New Single will be released soon . . . !!
-            </Typography> */}
             <Spacer height={100}/>
             <div container className={classes.rowCenter}>
                 <div className={classes.margin}>
@@ -141,19 +192,15 @@ const HomePage = () => {
                     <div className={classes.title}>
                             bad mind feat. Itaq
                     </div>
-                    <div className={classes.description}>
-                            New Single will be released soon . . . !!
-                    </div>
                     <Grid item xs={12}>
-                        <CountDown></CountDown>
+                        <SalesInfo sales={null} supply={supply}></SalesInfo>
                     </Grid>
                 </div>
             </div>
         </div>
         </div>
         <div className={classes.back2}>
-        {/* <Spacer height={60}/> */}
-        <Tokenomics></Tokenomics>
+        <TokenDoughnuts sales = {sales} supply={maxSupply} minted={data}></TokenDoughnuts>
         <Spacer height={20}/>
         <Grid container justifyContent="center">
             <AboutUs />

@@ -24,7 +24,7 @@ const App = () => {
     <>
       <ThemeProvider theme={theme}>
         <MusicProvider>
-          <div style={{position:'fixed', left: 10, bottom: 10, zIndex: 1}}> 
+          <div style={{position:'fixed', left: 30, bottom: 25, zIndex: 1}}> 
             <Player />
           </div>
           <MyRoutes />

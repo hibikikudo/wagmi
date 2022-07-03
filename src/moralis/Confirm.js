@@ -1,5 +1,5 @@
 import { Button, makeStyles, CircularProgress } from "@material-ui/core";
-import { useMoralis, useMoralisWeb3Api, useMoralisWeb3ApiCall, useWeb3ExecuteFunction, useNewMoralisObject } from "react-moralis";
+import { useMoralis, useMoralisWeb3Api, useMoralisWeb3ApiCall, useChain } from "react-moralis";
 import { useState, useEffect } from "react";
 import styled from 'styled-components';
 import Spacer from "../components/Spacer";
@@ -69,6 +69,7 @@ const ConfirmButton = ({toETH, confirmed, tokenId=1}) => {
   const { native } = useMoralisWeb3Api();
 
   const { isAuthenticated, account, chainId } = useMoralis();
+  const { switchNetwork } = useChain();
 
   const getContractAddress = () => {
     if(ToETH){
@@ -113,7 +114,8 @@ const ConfirmButton = ({toETH, confirmed, tokenId=1}) => {
         fetch();
         console.log("fetch")
       }else{
-        alert("please connect to Polygon Chain!")
+        alert("The system will change your network to Polygon.");
+        switchNetwork("0x89");
       }
     }else{
       if(chainId === "0x1" && account && isAuthenticated){
@@ -121,7 +123,8 @@ const ConfirmButton = ({toETH, confirmed, tokenId=1}) => {
         fetch();
         console.log("fetch")
       }else{
-        alert("please connect to Ethereum Chain!")
+        alert("The system will change your network to Ethereum.");
+        switchNetwork("0x1");
       }
     }
   }

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useMoralis } from "react-moralis";
+import { useMoralis, useChain } from "react-moralis";
 import { getEllipsisTxt } from "../helpers/formatters";
 import { useState } from "react";
 import { Button, makeStyles } from "@material-ui/core";
@@ -8,13 +8,13 @@ import { faCircleXmark, faWallet } from "@fortawesome/free-solid-svg-icons";
 
 const useStyles = makeStyles({
   button: {
-    height:40,
-    width: 180,
+    height:45,
+    width: 190,
     background: "#7547D7",
     borderRadius: 0,
     boxShadow: '3px 3px 0.1px 0.1px rgba(0, 0, 0, .1)',
     marginLeft: 20,
-    fontSize: 12,
+    fontSize: 14,
     display: 'flex',
     justifyContent:'flex-start',
     "&:hover": {
@@ -36,13 +36,15 @@ const useStyles = makeStyles({
 const ConnectWalletButton = ({color = '#333'}) => {
     const classes = useStyles();
     const { authenticate, isAuthenticated, isAuthenticating, account, chainId, logout } = useMoralis();
+    const { switchNetwork } = useChain();
     const [address, setAddress] = useState();
 
   useEffect(() => {
     if(chainId === "0x1" || chainId === "0x4" || chainId === "0x89" || chainId === null){
       console.log("chainId", chainId)
     }else{
-      alert("Please connect metamask to Ethereum chain");
+      alert("The system will change your network to Ethereum");
+      switchNetwork("0x1");
     }
     setAddress((isAuthenticated && account));
   }, [account, isAuthenticated, chainId]);

@@ -25,7 +25,7 @@ if(window.ethereum){
   sale_filter = contract.filters.NowOnSale(null);
 }
 
-const Tokenomics = () => {
+const Tokenomics = ({}) => {
   const { native } = useMoralisWeb3Api();
   const { isAuthenticated, account } = useMoralis();
   const [sales, setSeles] = useState();
@@ -39,7 +39,7 @@ const Tokenomics = () => {
     }
     const fetchSupply = async () => {
       fetch();
-      console.log("TokenSupply", data)
+      // console.log("TokenSupply", data)
     }
     if(window.ethereum) fetchEvent();
     fetchSupply();

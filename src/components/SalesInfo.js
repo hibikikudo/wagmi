@@ -1,7 +1,7 @@
-import { div, makeStyles, Typography } from "@material-ui/core";
+import { div, makeStyles, Typography, Button, Grid } from "@material-ui/core";
 import Countdown from "react-countdown";
+import { Path } from './Routes';
 
-const Completionist = () => <span>You are good to go!</span>;
 const useStyles = makeStyles({
     rowCenter: {
         display: 'flex',
@@ -53,7 +53,39 @@ const useStyles = makeStyles({
         fontSize: 20,
         fontFamily: 'Lato',
         fontWeight: 'bold'
-    }
+    },
+    description: {
+        fontWeight:'bold',
+        marginLeft:20,
+    },
+    buttonMargin: {
+        margin: 10,
+        "box-sizing": "border-box"
+    },
+    customButton: {
+        height: 60,
+        width: 200,
+        fontSize: 24,
+        fontFamily: 'Lato',
+        fontWeight: 'bold',
+        backgroundColor: '#4911BF',
+        color: 'white',
+        "box-sizing": "border-box",
+        "&:hover": {
+            background: "#4911BF"
+          },
+    },
+    incite: {
+        fontSize: 26,
+        fontWeight:'bold',
+        marginBottom:10,
+    },
+    columnCenter: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+      },
 });
 const Time = ({days, hours, minutes, seconds}) => {
     const classes = useStyles();
@@ -63,17 +95,14 @@ const Time = ({days, hours, minutes, seconds}) => {
                     <div  className={classes.number}>{days}</div>
                     <div  className={classes.unit}>days</div>
                 </div>
-                {/* <div className={classes.colon}>:</div> */}
                 <div className={classes.countCol}>
                     <div className={classes.number}>{hours}</div>
                     <div className={classes.unit}>hours</div>
                 </div>
-                {/* <div className={classes.colon}>:</div> */}
                 <div className={classes.countCol}>
                     <div className={classes.number}>{minutes}</div>
                     <div className={classes.unit}>minutes</div>
                 </div>
-                {/* <div className={classes.colon}>:</div> */}
                 <div className={classes.countCol}>
                     <div  className={classes.number}>{seconds}</div>
                     <div  className={classes.unit}>seconds</div>
@@ -82,24 +111,57 @@ const Time = ({days, hours, minutes, seconds}) => {
         </div>
 }
 const renderer = ({ days, hours, minutes, seconds, completed }) => {
-
-    if (completed) {
-      // Render a completed state
-      return <Completionist />;
-    } else {
-      // Render a countdown
-      return <Time days={days} hours={hours} minutes={minutes} seconds={seconds} />;
-    }
+    return <Time days={days} hours={hours} minutes={minutes} seconds={seconds} />;
 };
 
-const CountDown = () => {
-    return <div>
+/*
+*  sales == 0 => Presale
+*  sales == 1 => PublicSale
+*  sales == 2 => Suspended
+*/
+const SalesInfo = ({sales, supply}) => {
+    const classes = useStyles();
+    if(sales == null){
+        return <div>
+        <div className={classes.description}>
+            New Single will be released soon . . . !!
+        </div>
         <Countdown
-            date={new Date('June 28, 2022 00:00:00')}
+            date={new Date('July 15, 2022 00:00:00')}
             renderer={renderer}
         >
         </Countdown>
-    </div>
+        </div>;
+    } else if(supply === true){
+        return <div className={classes.columnCenter}>
+        <div className={classes.incite}>
+        Mint is now available !!
+        </div>
+        <Grid item className={classes.buttonMargin}>
+            <Button 
+                href={Path.mint}
+                className={classes.customButton}
+                >
+                Go Mint Page
+            </Button>
+        </Grid>
+        </div>;
+    } else {
+        return <div className={classes.columnCenter}>
+        <div className={classes.incite}>
+        Mint sale is finished !!
+        </div>
+        <Grid item className={classes.buttonMargin}>
+            <Button 
+                href="https://opensea.io/collection/wagmimusic"
+                target="_blank"
+                className={classes.customButton}
+                >
+                Go Opensea
+            </Button>
+        </Grid>
+        </div>;
+    };
 };
 
-export default CountDown;
+export default SalesInfo;
