@@ -300,6 +300,7 @@ const AppPage = () => {
                 </div>
               </div>
             </Card>
+            <Spacer height={200}/>
     </div>
   </div>
   </>
