@@ -140,7 +140,7 @@ const AboutUs = () => {
                 github="https://github.com/allegorywrite"
             />
             <Profile
-                name="Haruto Takano"
+                name="hal"
                 imageURL="/image/hal.png"
                 title="Frontend Engineer"
                 twitter="https://twitter.com/hal_bo_"
