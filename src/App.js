@@ -1,17 +1,40 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
 import { ThemeProvider } from "@material-ui/core";
-import Header from "./components/Header";
-import Home from "./pages/HomePage";
 import MyRoutes from "./components/Routes";
 import theme from "./Theme";
 import { MusicProvider } from "./provider/MusicProvider";
 import Player from "./components/Player";
+import { ethers } from "ethers";
+import contractAbi from "./moralis/abi.json";
+import { useMoralisWeb3Api, useMoralisWeb3ApiCall } from "react-moralis";
+
+const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS;
+const maxSupply = process.env.REACT_APP_MAX_SUPPLY;
+
+const options = {
+  chain: "rinkeby",
+  address: contractAddress,
+  function_name: "tokenSupply",
+  abi: [{"inputs":[],"name":"tokenSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}],
+  params: {}
+};
+
+let web3Provider, contract, sale_filter;
+if(window.ethereum){
+  web3Provider = new ethers.providers.Web3Provider(window.ethereum);
+  contract = new ethers.Contract(contractAddress, contractAbi, web3Provider);
+  sale_filter = contract.filters.NowOnSale(null);
+}
 
 const App = () => {
-
-  const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading } =
+  const { native } = useMoralisWeb3Api();
+  const { isWeb3Enabled, enableWeb3, isAuthenticated, account, isWeb3EnableLoading } =
     useMoralis();
+
+  const [sales, setSeles] = useState();
+  const [supply, setSupply] = useState(true);
+  const { fetch, data, error, isLoading } = useMoralisWeb3ApiCall(native.runContractFunction,{...options});
 
   useEffect(() => {
     const connectorId = window.localStorage.getItem("connectorId");
@@ -20,6 +43,25 @@ const App = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, isWeb3Enabled]);
 
+  useEffect(() => {
+    const fetchEvent = async () => {
+    const sale_event = await contract.queryFilter(sale_filter);
+    setSeles(sale_event[sale_event.length-1].args[0])
+    }
+    const fetchSupply = async () => {
+    fetch();
+    }
+    if(window.ethereum) fetchEvent();
+    fetchSupply();
+  }, [account]);
+
+  useEffect(() => {
+    if(data===`${maxSupply}`){
+        setSupply(false);
+        console.log("Token Supply reached max amount");
+    }
+  }, [data])
+
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -27,7 +69,7 @@ const App = () => {
           <div style={{position:'fixed', left: 30, bottom: 25, zIndex: 1}}> 
             <Player />
           </div>
-          <MyRoutes />
+          <MyRoutes sales={sales} inStock={supply} maxSupply={maxSupply} minted={data}/>
         </MusicProvider>
       </ThemeProvider>
     </>

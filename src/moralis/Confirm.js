@@ -3,7 +3,7 @@ import { useMoralis, useMoralisWeb3Api, useMoralisWeb3ApiCall, useChain } from "
 import { useState, useEffect } from "react";
 import styled from 'styled-components';
 import Spacer from "../components/Spacer";
-import SendButton from "./SendButton";
+import { EstGasExtension } from "../moralis/SendButton";
 
 const StyledCircularProgress = styled(CircularProgress)`
   color: #333;
@@ -51,7 +51,7 @@ const Error = ({error, data}) => {
     {error}
     </div>
   }
-  if(data==0){
+  if(data==="0"){
     return <div style={{color:'red', fontWeight:'bold'}}>
     It seems you have no token to send!
     <Spacer height={20}/>
@@ -59,7 +59,7 @@ const Error = ({error, data}) => {
   }
 }
 
-const ConfirmButton = ({toETH, confirmed, tokenId=1}) => {
+const ConfirmButton = ({toETH, tokenId, update}) => {
 
   const classes = useStyles();
 
@@ -87,32 +87,32 @@ const ConfirmButton = ({toETH, confirmed, tokenId=1}) => {
     function_name: "balanceOf",
     abi: [{"inputs":[{"internalType":"address","name":"account","type":"address"},{"internalType":"uint256","name":"id","type":"uint256"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}],
     params: {
-      account: account,
-      // account: "0xaDAcbA4Cae9471C26D613F7A94014549a647783C",
+      // account: account,
+      account: "0xaDAcbA4Cae9471C26D613F7A94014549a647783C",
       id: tokenId
     }
   };
 
-  const { fetch, data, error, isLoading } = useMoralisWeb3ApiCall(native.runContractFunction,{...options});
+  const { fetch, data, error, isLoading, isFetching, setData } = useMoralisWeb3ApiCall(native.runContractFunction,{...options});
 
   useEffect(()=>{
-    console.log(data)
+    // console.log("balance of token",data);
     if(data>=1){
-      setConfirmed(true)
+      setConfirmed(true);
     }
-  }, [data])
+  },[data])
 
-  useEffect(()=> {
+  useEffect(() => {
+    setConfirmed(false);
+    setData(null);
     setToETH(toETH);
-    setConfirmed(confirmed);
-  }, [toETH, confirmed])
+  }, [update, toETH])
 
   const Confirm = () => {
     if(ToETH){
       if(chainId === "0x89" && account && isAuthenticated){
         // Fetch balanceOf
         fetch();
-        console.log("fetch")
       }else{
         alert("The system will change your network to Polygon.");
         switchNetwork("0x89");
@@ -121,27 +121,20 @@ const ConfirmButton = ({toETH, confirmed, tokenId=1}) => {
       if(chainId === "0x1" && account && isAuthenticated){
         // Fetch balanceOf
         fetch();
-        console.log("fetch")
       }else{
         alert("The system will change your network to Ethereum.");
         switchNetwork("0x1");
       }
     }
   }
-  if(error){
-    return <div>
-        <div>error</div>
-        <Button className={classes.send} onClick={Confirm}>Confirm</Button>
-      </div>
-  }
 
-  if(isLoading){
+  if(isLoading||isFetching){
     return <div className={classes.load}>
       <StyledCircularProgress style={{width:25, height:25}}/>
     </div>
   }else{
     if(Confirmed){
-      return <SendButton address={getContractAddress()} tokenId={tokenId} toETH={ToETH}/>;
+      return <EstGasExtension address={getContractAddress()} tokenId={tokenId} toETH={ToETH}/>;
     }else{
       return <div className={classes.columnCenter}>
         <Error error={error} data={data}/>

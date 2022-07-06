@@ -1,10 +1,19 @@
-import { Button, makeStyles } from "@material-ui/core";
+import { Button, makeStyles, CircularProgress } from "@material-ui/core";
 import { useMoralis, useMoralisQuery, useMoralisCloudFunction, useWeb3ExecuteFunction, useNewMoralisObject } from "react-moralis";
 import keccak256 from "keccak256";
 import { Buffer } from 'buffer';
-import { MerkleTree } from 'merkletreejs'
+import styled from 'styled-components';
+import { MerkleTree } from 'merkletreejs';
+import Spacer from "../components/Spacer";
+
+const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS;
 
 window.Buffer = Buffer;
+
+const StyledCircularProgress = styled(CircularProgress)`
+  color: #333;
+  size: 10px;
+`;
 
 const useStyles = makeStyles({
   button: {
@@ -21,29 +30,37 @@ const useStyles = makeStyles({
     // "&:active": {
     //   background: "aqua"
     // }
-  }
+  },
+  load: {
+    height: 50, 
+    width: 120, 
+    backgroundColor:'#F4BF1A',
+    borderRadius:5,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  columnCenter: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+  },
 });
 
-const MintButton = () => {
-
-  const classes = useStyles();
-
-  const options = {
-    contractAddress:"0x64B4B8AD8AB87F988d0FE67c38aFE1acd61B9348",
-    functionName:"mint",
-    abi:[{"inputs":[{"internalType":"uint256","name":"_tokenId","type":"uint256"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"mint","outputs":[],"stateMutability":"nonpayable","type":"function"}],
-    params:{
-      _tokenId:5,
-      _amount:1
-    },
-  };
-
-  const { data, error, fetch, isFetching, isLoading } = useWeb3ExecuteFunction(options);
-
-  return (
-  <div>
-    <Button className={classes.button} onClick={() => fetch()} disabled={isFetching}>Mint</Button>
-  </div>)
+const Error = ({error}) => {
+  if(error){
+    if(error.data){
+      return <div style={{color:'red', fontWeight:'bold'}}>
+      {error.data.message}
+      <Spacer height={20}/>
+      </div>
+    }
+    return <div style={{color:'red', fontWeight:'bold'}}>
+    {error.message}
+    <Spacer height={20}/>
+    </div>
+  }
 }
 
 const WLMintButton = (data) => {
@@ -59,29 +76,34 @@ const WLMintButton = (data) => {
     merkleTree = new MerkleTree(leafNodes, keccak256, { sortPairs: true});
     // console.log(merkleTree.toString());
     // console.log(keccak256(account));
-    const testAccount = '0x5DE4Fc4548ba286EB29173630618D4Ef5E489Bd6';
-    clamingHashedAddress = keccak256(testAccount);
+    clamingHashedAddress = keccak256(account);
     return hexPloof = merkleTree.getHexProof(clamingHashedAddress);
-    // console.log("Merkle Ploof\n", hexPloof);
   }
 
-  const hexPloof = getHexPloof(data.data[0].attributes.allowlist);
-  console.log('merklePloof\n',hexPloof);
+  const hexPloof = getHexPloof(data.data[data.data.length-1].attributes.allowlist);
+  // console.log('merklePloof\n',hexPloof);
 
   const options = {
-    contractAddress:"0x64B4B8AD8AB87F988d0FE67c38aFE1acd61B9348",
-    functionName:"mint",
-    abi:[{"inputs":[{"internalType":"uint256","name":"_tokenId","type":"uint256"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"mint","outputs":[],"stateMutability":"nonpayable","type":"function"}],
+    contractAddress: contractAddress,
+    functionName:"whitelistMint",
+    abi:[{"inputs":[{"internalType":"bytes32[]","name":"_merkleProof","type":"bytes32[]"}],"name":"whitelistMint","outputs":[],"stateMutability":"nonpayable","type":"function"}],
     params:{
-      _tokenId:5,
-      _amount:1
+      _merkleProof: hexPloof
     }
   };
-  const { fetch } = useWeb3ExecuteFunction(options);
+  const { fetch, error } = useWeb3ExecuteFunction(options);
 
-  return (
-  <div>
-    <Button className={classes.button} onClick={fetch}>Mint</Button>
-  </div>)
+  if(hexPloof){
+    return (
+      <div className={classes.columnCenter}>
+        <Error error={error}/>
+        <Button className={classes.button} onClick={fetch}>Mint</Button>
+      </div>)
+  }else{
+    return <div className={classes.load}>
+      <StyledCircularProgress style={{width:25, height:25}}/>
+    </div>
+  }
+  
 }
-export {MintButton, WLMintButton};
+export default WLMintButton;

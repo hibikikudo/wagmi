@@ -1,42 +1,15 @@
 import { Grid, makeStyles, Typography } from "@material-ui/core";
 import AboutUs from "../components/AboutUs";
-import Tokenomics from "../moralis/Tokenomics";
 import SalesInfo from "../components/SalesInfo";
 import Header from "../components/Header";
 import Spacer from "../components/Spacer";
-import { ethers } from "ethers";
-// Arrange later
-import contractAbi from "../moralis/abi.json"
-import { faListSquares } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from 'react';
-import { useMoralis } from "react-moralis";
 import React from "react";
-import { useMoralisWeb3Api, useMoralisWeb3ApiCall } from "react-moralis";
 import TokenDoughnuts from "../components/TokenDoughnuts";
-
-// const contractAddress = process.env.CONTRACT_ADDRESS
-const contractAddress = "0xECc866f9D76ef66A92D3BDb61F558582b56Cdeb1";
-let web3Provider, contract, sale_filter;
-const maxSupply = 48;
-
-const options = {
-  chain: "rinkeby",
-  address: contractAddress,
-  function_name: "tokenSupply",
-  abi: [{"inputs":[],"name":"tokenSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}],
-  params: {}
-};
-
-if(window.ethereum){
-  web3Provider = new ethers.providers.Web3Provider(window.ethereum);
-  contract = new ethers.Contract(contractAddress, contractAbi, web3Provider);
-  sale_filter = contract.filters.NowOnSale(null);
-}
 
 const useStyles = makeStyles({
     back: {
         backgroundColor: '#FFFAF3',
-        minHeight: '110vh',
+        minHeight: '100vh',
         minWidth: '100vw',
         zIndex: -3
     },
@@ -139,41 +112,16 @@ const useStyles = makeStyles({
         boxShadow: 'inset 4px 4px 5px 1px rgba(0, 0, 0, 0.8)',
     }
 })
-const HomePage = () => {
+const HomePage = ({sales, inStock, maxSupply, minted}) => {
     const classes = useStyles();
-
-    const { native } = useMoralisWeb3Api();
-    const { isAuthenticated, account } = useMoralis();
-    const [sales, setSeles] = useState();
-    const [supply, setSupply] = useState(true);
-    const { fetch, data, error, isLoading } = useMoralisWeb3ApiCall(native.runContractFunction,{...options});
-
-    useEffect(() => {
-        const fetchEvent = async () => {
-        const sale_event = await contract.queryFilter(sale_filter);
-        setSeles(sale_event[sale_event.length-1].args[0])
-        }
-        const fetchSupply = async () => {
-        fetch();
-        }
-        if(window.ethereum) fetchEvent();
-        fetchSupply();
-    }, [account]);
-
-    useEffect(() => {
-        if(data===`${maxSupply}`){
-            setSupply(false);
-            console.log("Token Supply reached max amount");
-        }
-    }, [data])
 
     return <>
         <div className={classes.back}>
-        <Header color="#030303" subColor="white"/>
+        <Header color="#030303" subColor="white" sales={sales}/>
         <Spacer height={75}/>
         <div className={classes.columnCenter}>
             <Spacer height={100}/>
-            <div container className={classes.rowCenter}>
+            <div className={classes.rowCenter}>
                 <div className={classes.margin}>
                     <img className={classes.img}
                     src="/image/record.png"/>
@@ -193,14 +141,14 @@ const HomePage = () => {
                             bad mind feat. Itaq
                     </div>
                     <Grid item xs={12}>
-                        <SalesInfo sales={null} supply={supply}></SalesInfo>
+                        <SalesInfo sales={sales} supply={inStock}></SalesInfo>
                     </Grid>
                 </div>
             </div>
         </div>
         </div>
         <div className={classes.back2}>
-        <TokenDoughnuts sales = {sales} supply={maxSupply} minted={data}></TokenDoughnuts>
+        <TokenDoughnuts sales = {sales} supply={maxSupply} minted={minted}></TokenDoughnuts>
         <Spacer height={20}/>
         <Grid container justifyContent="center">
             <AboutUs />

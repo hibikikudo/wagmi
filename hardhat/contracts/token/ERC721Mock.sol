@@ -40,7 +40,7 @@ contract ERC721Mock is ERC721, RevenuePool, IERC721Mock{
 
   // 実行権限のある執行者
   mapping(address => bool) private _agent;
-  // ホワイトリストの既に請求者
+  // ホワイトリストの既請求者
   mapping(address => bool) public whitelistClaimed;
 
   event NowOnSale(SaleState sales);

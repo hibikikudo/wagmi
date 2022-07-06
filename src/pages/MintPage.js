@@ -1,10 +1,9 @@
 import { Grid, makeStyles, Typography } from "@material-ui/core";
-import  EventListener  from "../moralis/EventListener"
-import MintButton from "../moralis/MintButton";
-import Player from "../components/Player";
 import Header from "../components/Header";
 import Spacer from "../components/Spacer";
 import { useEffect, useState } from 'react'
+import MusicCard from '../components/MusicCard';
+import { useMoralis } from "react-moralis";
 
 const useStyles = makeStyles({
     pageClass: {
@@ -50,8 +49,9 @@ const useStyles = makeStyles({
         textShadow: '0px 0px 2px  rgba(0, 0, 0, 1)'
     }
 })
-const MintPage = () => {
+const MintPage = ({sales, inStock, maxSupply, minted}) => {
 
+    const { isAuthenticated, account } = useMoralis();
     const [opacity, setOpacity] = useState(1);
 
     const toggleVisibility = () => {
@@ -108,7 +108,10 @@ const MintPage = () => {
             <Spacer height={90}/>
             <div className={classes.pageClass}>
                 <Grid item>
-                    <EventListener/>
+                    {isAuthenticated && account
+                    ?
+                    <MusicCard sales={sales} valid={true}/>
+                    :<MusicCard sales={sales} valid={false}/>}
                 </Grid>
             </div>
         </div>

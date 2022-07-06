@@ -29,13 +29,13 @@ const useStyles = makeStyles({
   },
   graph: {
     margin: "auto",
-    width: "500px",
-    height: "500px",
+    width: "600px",
+    height: "600px",
     position: "relative"
   },
   circle: {
-    width: "150px",
-    height: "150px",
+    width: "250px",
+    height: "250px",
     position: "absolute",
     "border-radius": "50%",
     top: "51%",
@@ -45,15 +45,32 @@ const useStyles = makeStyles({
     "text-align": "center",
     "line-height": "150px"
   },
-  salesLabel: {
-    width: "160px",
+  dayLabel: {
+    width: "auto",
     height: "50px",
     fontSize: 24,
+    // fontWeight: 'bold',
     position: "relative",
-    'margin-left': '14%'
+    'margin-left': '10%',
+    fontFamily: 'Lato',
+    display: 'flex',
+    "align-items": "center",
+    justifyContent: 'flex-start'
+  },
+  salesLabel: {
+    width: "auto",
+    height: "50px",
+    fontSize: 24,
+    // fontWeight: 'bold',
+    position: "relative",
+    'margin-left': '6%',
+    fontFamily: 'Rock Salt',
+    display: 'flex',
+    "align-items": "center",
+    justifyContent: 'flex-start'
   },
   salesColumn: {
-    width: "200px",
+    width: "300px",
     height: "50px",
     top: "50%",
     left: "50%",
@@ -61,19 +78,13 @@ const useStyles = makeStyles({
     flexDirection: 'row',
     position: "absolute",
     "align-items": "center",
-    justifyContent: 'center'
+    justifyContent: 'flex-start'
   },
   salesPoint: {
-    width: "8px",
-    height: "8px",
+    width: "10px",
+    height: "10px",
     "border-radius": "50%",
     position: "relative"
-  },
-  salesPoint1: {
-    width: "8px",
-    height: "8px",
-    "border-radius": "50%",
-    position: "absolute"
   },
   tokenSupply: {
     width: "auto",
@@ -92,17 +103,18 @@ const useStyles = makeStyles({
     "align-items": "flex-end"
   },
   sbold: {
-    fontSize: "14px",
+    fontSize: "24px",
     fontWeight: 'bold',
-    "margin-left": "5px"
+    "margin-left": "5px",
+    "margin-bottom": "20px"
   },
   bbold: {
-    fontSize: "18px",
+    fontSize: "32px",
     fontWeight: 'bold',
     "margin-left": "5px"
   },
   thin: {
-    fontSize: "12px",
+    fontSize: "24px",
     "line-height": "20px"
   }
 });
@@ -113,10 +125,10 @@ const TokenDoughnut = ({supply, minted}) => {
     {
       data: [minted, supply - minted],
       backgroundColor: ['#030303', '#F4E8D6'],
-      borderWidth: 1,
+      borderWidth: 0,
       borderRadius: 1,
-      radius:170,
-      cutout:"60%"
+      radius:220,
+      cutout:"70%"
     },
    ],
   };
@@ -155,7 +167,7 @@ const SalesLabels = ({sales}) => {
        backgroundColor: ['#F4E8D6'],
        borderWidth: 1,
        borderRadius: 1,
-       radius:200,
+       radius:250,
        cutout:"98%"
      },
     ],
@@ -168,7 +180,7 @@ const SalesLabels = ({sales}) => {
        backgroundColor: ['#030303', '#F4E8D6'],
        borderWidth: 1,
        borderRadius: 1,
-       radius:200,
+       radius:250,
        cutout:"98%"
      },
     ],
@@ -181,7 +193,7 @@ const SalesLabels = ({sales}) => {
        backgroundColor: ['#030303', '#F4E8D6'],
        borderWidth: 1,
        borderRadius: 1,
-       radius:200,
+       radius:250,
        cutout:"98%"
      },
     ],
@@ -194,7 +206,7 @@ const SalesLabels = ({sales}) => {
        backgroundColor: ['#030303', '#F4E8D6'],
        borderWidth: 1,
        borderRadius: 1,
-       radius:200,
+       radius:250,
        cutout:"98%"
      },
     ],
@@ -211,54 +223,56 @@ const SalesLabels = ({sales}) => {
         <StyledDoughnuts
           data={graphdata_presale} 
           options={doughnutOptions} />
-        <SalesLabel label="presale" progress="true" degree1="-45" degree2="45"/>
-        <SalesLabel label="public sale" progress="false" degree1="0" degree2="0"/>
-        <SalesLabel label="end of sale" progress="false" degree1="45" degree2="-45"/>
+        <SalesLabel day="7/10" label="Site Release" progress="true" degree1="-45" degree2="45"/>
+        <SalesLabel day="7/15" label="Mint Sale" progress="false" degree1="0" degree2="0"/>
+        <SalesLabel day="8/20" label="End of Sale" progress="false" degree1="45" degree2="-45"/>
       </div>
     case 1:
         return <div>
         <StyledDoughnuts
           data={graphdata_public} 
           options={doughnutOptions} />
-        <SalesLabel label="presale" progress="true" degree1="-45" degree2="45"/>
-        <SalesLabel label="public sale" progress="true" degree1="0" degree2="0"/>
-        <SalesLabel label="end of sale" progress="false" degree1="45" degree2="-45"/>
+        <SalesLabel day="7/10" label="Site Release" progress="true" degree1="-45" degree2="45"/>
+        <SalesLabel day="7/15" label="Mint Sale" progress="true" degree1="0" degree2="0"/>
+        <SalesLabel day="8/20" label="End of Sale" progress="false" degree1="45" degree2="-45"/>
       </div>
     case 2:
         return <div>
         <StyledDoughnuts
           data={graphdata_end} 
           options={doughnutOptions} />
-        <SalesLabel label="presale" progress="true" degree1="-45" degree2="45"/>
-        <SalesLabel label="public sale" progress="true" degree1="0" degree2="0"/>
-        <SalesLabel label="end of sale" progress="true" degree1="45" degree2="-45"/>
+        <SalesLabel day="7/10" label="Site Release" progress="true" degree1="-45" degree2="45"/>
+        <SalesLabel day="7/15" label="Mint Sale" progress="true" degree1="0" degree2="0"/>
+        <SalesLabel day="8/20" label="End of Sale" progress="true" degree1="45" degree2="-45"/>
       </div>
     default:
         return <div>
         <StyledDoughnuts
           data={graphdata_pre} 
           options={doughnutOptions} />
-        <SalesLabel label="presale" progress="false" degree1="-45" degree2="45"/>
-        <SalesLabel label="public sale" progress="false" degree1="0" degree2="0"/>
-        <SalesLabel label="end of sale" progress="false" degree1="45" degree2="-45"/>
+        <SalesLabel day="7/10" label="Site Release" progress="false" degree1="-45" degree2="45"/>
+        <SalesLabel day="7/15" label="Mint Sale" progress="false" degree1="0" degree2="0"/>
+        <SalesLabel day="8/20" label="End of Sale" progress="false" degree1="45" degree2="-45"/>
       </div>
 }
 };
 
-const SalesLabel = ({label, progress, degree1, degree2}) => {
+const SalesLabel = ({day, label, progress, degree1, degree2}) => {
   const classes = useStyles();
   if(progress === "true"){
     return <div 
     className={classes.salesColumn} 
-    style={{transform: `translate(-100px,-20px) rotate(${degree1}deg) translate(198px,0) rotate(${degree2}deg) translate(100px,25px) translate(-3%,-50%)`}}>
+    style={{transform: `translate(-100px,-20px) rotate(${degree1}deg) translate(248px,0) rotate(${degree2}deg) translate(100px,25px) translate(-2%,-50%)`}}>
     <div className={classes.salesPoint} style={{background: "#030303"}}></div>
+    <div className={classes.dayLabel} style={{color: "#030303"}}>{day}</div>
     <div className={classes.salesLabel} style={{color: "#030303"}}>{label}</div>
   </div>
   }else{
     return <div 
     className={classes.salesColumn} 
-    style={{transform: `translate(-100px,-20px) rotate(${degree1}deg) translate(198px,0) rotate(${degree2}deg) translate(100px,25px) translate(-3%,-50%)`}}>
+    style={{transform: `translate(-100px,-20px) rotate(${degree1}deg) translate(248px,0) rotate(${degree2}deg) translate(100px,25px) translate(-2%,-50%)`}}>
     <div className={classes.salesPoint} style={{background: "#F4E8D6"}}></div>
+    <div className={classes.dayLabel} style={{color: "#F4E8D6"}}>{day}</div>
     <div className={classes.salesLabel} style={{color: "#F4E8D6"}}>{label}</div>
     </div>
   }

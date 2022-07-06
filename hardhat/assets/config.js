@@ -1,6 +1,6 @@
 const assetElement = {
     name:'Hibikilla - "Bad Mind feat. Itaq"',
-    description:"",
+    description:"Add Description later",
     attributes: [
         {"trait_type":"Art Work","value":"Hibikilla"},
         {"trait_type":"Artist","value":"Hibikilla"},

@@ -115,13 +115,13 @@ const renderer = ({ days, hours, minutes, seconds, completed }) => {
 };
 
 /*
-*  sales == 0 => Presale
-*  sales == 1 => PublicSale
+*  sales == 0 => PreRelease
+*  sales == 1 => FreeMint
 *  sales == 2 => Suspended
 */
 const SalesInfo = ({sales, supply}) => {
     const classes = useStyles();
-    if(sales == null){
+    if(sales === 0){
         return <div>
         <div className={classes.description}>
             New Single will be released soon . . . !!
@@ -132,7 +132,7 @@ const SalesInfo = ({sales, supply}) => {
         >
         </Countdown>
         </div>;
-    } else if(supply === true){
+    } else if(supply === true && sales === 1){
         return <div className={classes.columnCenter}>
         <div className={classes.incite}>
         Mint is now available !!

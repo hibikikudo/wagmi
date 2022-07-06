@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import { getChain, useMoralis } from "react-moralis";
 import { useMoralisWeb3Api, useMoralisWeb3ApiCall } from "react-moralis";
 import ConfirmButton from "../moralis/Confirm";
+import AllowListButton from "../moralis/AllowlistButton"
 
 // const StyledInputLabel = styled(InputLabel)`
 //   color: #030303;
@@ -211,17 +212,19 @@ const Jacket = ({tokenId}) => {
 const AppPage = () => {
   const classes = useStyles();
   const [ ToETH, setToETH ] = useState();
-  const [ Confirmed, setConfirmed ] = useState(false);
   const [tokenId, setTokenId] = useState(1);
+  const [update,setUpdate]=useState(false);
 
   const handleChange = (event) => {
     setTokenId(event.target.value);
+    setUpdate(update?false:true);
   };
 
   return <>
   <div className={classes.back}>
     <Header color="#030303" subColor="white"/>
         <Spacer height={150}></Spacer>
+        {/* <AllowListButton/> */}
     <div className={classes.columnCenter}>
       <Typography style={{fontSize: 60, marginBottom: 10, fontWeight:'bold'}}>
         Omnichain Sender
@@ -274,7 +277,7 @@ const AppPage = () => {
                         <Spacer height={30}/>
                         <Button className={classes.button} onClick={()=>{
                           ToETH ? setToETH(false) : setToETH(true);
-                          setConfirmed(false)
+                          setUpdate(update?false:true)
                         }} >
                           <img className={classes.arrow}
                           src="/image/arrowUpDown.svg"/>
@@ -294,7 +297,7 @@ const AppPage = () => {
                         </div>
                     </div>
                     <Spacer height={40}/>
-                    <ConfirmButton toETH={ToETH} confirmed={Confirmed} tokenId={tokenId}></ConfirmButton>
+                    <ConfirmButton toETH={ToETH} tokenId={tokenId} update={update}></ConfirmButton>
                     <Spacer height={20}/>
                 </div>
               </div>

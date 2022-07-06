@@ -3,10 +3,13 @@ import { FormControlLabel, Button, Card, Checkbox, Grid, Hidden, makeStyles } fr
 import { useContext, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePause, faCirclePlay } from "@fortawesome/free-solid-svg-icons";
-import {MintButton, WLMintButton} from "../moralis/MintButton";
+import WLMintButton from "../moralis/MintButton";
 import Spacer from "./Spacer";
-import { useMoralisQuery } from "react-moralis";
+import { useMoralis, useMoralisQuery } from "react-moralis";
 import { MusicContext } from "../provider/MusicProvider";
+import keccak256 from "keccak256";
+import { Buffer } from 'buffer';
+import { MerkleTree } from 'merkletreejs'
 
 const useStyles = makeStyles({
     card: {
@@ -21,6 +24,7 @@ const useStyles = makeStyles({
         justifyContent: 'center',
         alignItems: 'center',
         fontFamily:'Lato',
+        position:'relative',
     },
     image: {
         margin: 10,
@@ -88,11 +92,25 @@ const useStyles = makeStyles({
         fontWeight: 'bold',
         fontSize: 20,
         backgroundColor: "#716E63"
-      }
+      },
+    graffiti: {
+        fontFamily:'Rock Salt',
+        fontSize:'38px',
+        fontWeight:'bold',
+        position: 'absolute',
+        color: '#B01F1F',
+        top: '8%',
+        left: '3%',
+        transform: 'rotate(-20deg)'
+    }
 });
 
-const MintButtons = ({valid, sales, checked}) => {
+const MintButtons = ({sales, checked}) => {
     const classes = useStyles();
+
+    const [valid, setValid] = useState(false);
+
+    const { account } = useMoralis();
     
     const { data } = useMoralisQuery(
         "AllowList",
@@ -100,33 +118,62 @@ const MintButtons = ({valid, sales, checked}) => {
         []
     )
 
+    useEffect(() => {
+        if(data.length >= 1){
+            let wlarray = data[data.length-1].attributes.allowlist;
+            let wlarray_lc = wlarray.map(addr => addr.toLowerCase());
+            if(wlarray_lc.includes(`${account}`)){
+                console.log("You are whitelisted account");
+                setValid(true);
+            }else{
+                console.log("You aren't whitelisted account");
+            }
+        }
+    }, [data]);
+
     if(checked && valid && data){
         /*
-        *  sales == 0 => Presale
-        *  sales == 1 => PublicSale
+        *  sales == 0 => PreRelease
+        *  sales == 1 => FreeMint
         *  sales == 2 => Suspended
         */
         switch(sales){
             case 0:
-                return <div>
-                <WLMintButton data={data}/>
-                </div>
+                return <Button className={classes.button} style={{backgroundColor: "#716E63"}} onClick={()=>{alert("mint sale has yet to start!", sales)}} >Mint</Button>
             case 1:
                 return <div>
-                <MintButton/>
+                <WLMintButton data={data}/>
                 </div>
             case 2:
                 return <Button className={classes.button} style={{backgroundColor: "#716E63"}} onClick={()=>{alert("Mint sale is suspended!")}} >Mint</Button>
             default:
                 return <Button className={classes.button} style={{backgroundColor: "#716E63"}} onClick={()=>{alert("mint sale has yet to start!", sales)}} >Mint</Button>
         }
+        // /*
+        // *  sales == 0 => Presale
+        // *  sales == 1 => PublicSale
+        // *  sales == 2 => Suspended
+        // */
+        // switch(sales){
+        //     case 0:
+        //         return <div>
+        //         <WLMintButton data={data}/>
+        //         </div>
+        //     case 1:
+        //         return <div>
+        //         <MintButton/>
+        //         </div>
+        //     case 2:
+        //         return <Button className={classes.button} style={{backgroundColor: "#716E63"}} onClick={()=>{alert("Mint sale is suspended!")}} >Mint</Button>
+        //     default:
+        //         return <Button className={classes.button} style={{backgroundColor: "#716E63"}} onClick={()=>{alert("mint sale has yet to start!", sales)}} >Mint</Button>
+        // }
     }else{
         return <Button className={classes.button} style={{backgroundColor: "#716E63"}} onClick={()=>{alert("You cannot mint because checkBox is not checked or you are not whitelisted!")}} >Mint</Button>
     }
-    
 }
 
-const MusicCard = ({artist = "hibikilla", title = "BAD MIND", valid, sales}) => {
+const MusicCard = ({artist = "hibikilla", title = "BAD MIND", sales}) => {
     const classes = useStyles();
     const { isPlaying, onPlay, onStop } = useContext(MusicContext);
 
@@ -138,6 +185,7 @@ const MusicCard = ({artist = "hibikilla", title = "BAD MIND", valid, sales}) => 
 
     return <div>
             <Card raised className={classes.card}>
+            <div className={classes.graffiti}>FreeMint !!</div>
                 <div className={classes.image}>
                     <img className={classes.img}
                     src="/image/bad_mind.png"/>
@@ -172,7 +220,7 @@ const MusicCard = ({artist = "hibikilla", title = "BAD MIND", valid, sales}) => 
                         <div className={classes.formContent}>I acknowledge that I have read and understood our policy prior to buying.</div>
                     </div>
                     <Spacer height={20}/>
-                    <MintButtons valid={valid} checked={checked} sales={sales}/>
+                    <MintButtons checked={checked} sales={sales}/>
                 </div>
             </Card>
 

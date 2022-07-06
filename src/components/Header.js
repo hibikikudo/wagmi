@@ -53,7 +53,7 @@ const useStyles = makeStyles({
         alignItems:"center",
     }
 });
-const Header = ({color, subColor}) => {
+const Header = ({color, subColor, sales}) => {
     const classes = useStyles();
     return <div>
     <Box sx={{ flexGrow: 1 }}>
@@ -83,7 +83,9 @@ const Header = ({color, subColor}) => {
                           Home
                         </Button>
                     </Grid>
-                    <Grid item className={classes.buttonMargin}>
+                    {sales!==0
+                        ?
+                        <Grid item className={classes.buttonMargin}>
                         <Button 
                             href={Path.mint}
                             className={classes.customButton}
@@ -91,7 +93,9 @@ const Header = ({color, subColor}) => {
                             >
                           Mint
                         </Button>
-                    </Grid>
+                        </Grid>
+                        :<div></div>
+                    }
                     <Grid item className={classes.buttonMargin}>
                         <Button 
                             href={Path.app}

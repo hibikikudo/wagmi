@@ -8,11 +8,16 @@ const fs = require("fs");
 const { default: axios } = require("axios");
 const { editionSize, assetElement } = require("../assets/config.js");
 
-const serverUrl = process.env.SERVER_URL;
-const appId = process.env.APP_ID;
+const serverUrl = process.env.REACT_APP_MORALIS_SERVER_URL;
+const appId = process.env.REACT_APP_MORALIS_APPLICATION_ID;
 const masterKey = process.env.MASTER_KEY;
 const apiUrl = process.env.API_URL;
 const apiKey = process.env.API_KEY;
+// const serverUrl = "7eQm2cJULhF5ds8x72AjjpUslM7LuoLknjmpfsfD";
+// const appId = "";
+// const masterKey = "";
+// const apiUrl = "";
+// const apiKey = "";
 
 Moralis.start({ serverUrl, appId, masterKey});
 
