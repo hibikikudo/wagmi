@@ -55,6 +55,7 @@ const useStyles = makeStyles({
 });
 const Header = ({color, subColor, sales}) => {
     const classes = useStyles();
+    console.log(!sales);
     return <div>
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" className={classes.headerBar}>
@@ -83,9 +84,9 @@ const Header = ({color, subColor, sales}) => {
                           Home
                         </Button>
                     </Grid>
-                    {sales!==0
-                        ?
-                        <Grid item className={classes.buttonMargin}>
+                    {!sales
+                        ?<div></div>
+                        :<Grid item className={classes.buttonMargin}>
                         <Button 
                             href={Path.mint}
                             className={classes.customButton}
@@ -94,7 +95,6 @@ const Header = ({color, subColor, sales}) => {
                           Mint
                         </Button>
                         </Grid>
-                        :<div></div>
                     }
                     <Grid item className={classes.buttonMargin}>
                         <Button 

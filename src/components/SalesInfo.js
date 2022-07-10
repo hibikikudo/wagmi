@@ -121,7 +121,7 @@ const renderer = ({ days, hours, minutes, seconds, completed }) => {
 */
 const SalesInfo = ({sales, supply}) => {
     const classes = useStyles();
-    if(sales === 0){
+    if(!sales){
         return <div>
         <div className={classes.description}>
             New Single will be released soon . . . !!

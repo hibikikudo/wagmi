@@ -225,7 +225,7 @@ const SalesLabels = ({sales}) => {
           options={doughnutOptions} />
         <SalesLabel day="7/10" label="Site Release" progress="true" degree1="-45" degree2="45"/>
         <SalesLabel day="7/15" label="Mint Sale" progress="false" degree1="0" degree2="0"/>
-        <SalesLabel day="8/20" label="End of Sale" progress="false" degree1="45" degree2="-45"/>
+        <SalesLabel day="" label="End of Sale" progress="false" degree1="45" degree2="-45"/>
       </div>
     case 1:
         return <div>
@@ -234,7 +234,7 @@ const SalesLabels = ({sales}) => {
           options={doughnutOptions} />
         <SalesLabel day="7/10" label="Site Release" progress="true" degree1="-45" degree2="45"/>
         <SalesLabel day="7/15" label="Mint Sale" progress="true" degree1="0" degree2="0"/>
-        <SalesLabel day="8/20" label="End of Sale" progress="false" degree1="45" degree2="-45"/>
+        <SalesLabel day="" label="End of Sale" progress="false" degree1="45" degree2="-45"/>
       </div>
     case 2:
         return <div>
@@ -243,7 +243,7 @@ const SalesLabels = ({sales}) => {
           options={doughnutOptions} />
         <SalesLabel day="7/10" label="Site Release" progress="true" degree1="-45" degree2="45"/>
         <SalesLabel day="7/15" label="Mint Sale" progress="true" degree1="0" degree2="0"/>
-        <SalesLabel day="8/20" label="End of Sale" progress="true" degree1="45" degree2="-45"/>
+        <SalesLabel day="" label="End of Sale" progress="true" degree1="45" degree2="-45"/>
       </div>
     default:
         return <div>
@@ -252,7 +252,7 @@ const SalesLabels = ({sales}) => {
           options={doughnutOptions} />
         <SalesLabel day="7/10" label="Site Release" progress="false" degree1="-45" degree2="45"/>
         <SalesLabel day="7/15" label="Mint Sale" progress="false" degree1="0" degree2="0"/>
-        <SalesLabel day="8/20" label="End of Sale" progress="false" degree1="45" degree2="-45"/>
+        <SalesLabel day="" label="End of Sale" progress="false" degree1="45" degree2="-45"/>
       </div>
 }
 };

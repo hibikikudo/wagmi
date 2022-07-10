@@ -54,7 +54,7 @@ interface IERC721Drop {
     * @param エージェントのアドレス
     * @dev 
     */
-    function license(address agentAddr) external;
+    function license(address _agentAddr) external;
 
     /*
     * @title unlicense
@@ -62,8 +62,14 @@ interface IERC721Drop {
     * @param エージェントのアドレス
     * @dev 
     */
-    function unlicense(address agentAddr) external;
-    
+    function unlicense(address _agentAddr) external;
+
+    /*
+    * @title inventoryReplenishment
+    * @dev 
+    */
+    function inventoryReplenishment(uint256 _amount) external;
+
     /*
     * @title setBaseURI
     * @dev 

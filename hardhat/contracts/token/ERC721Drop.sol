@@ -24,7 +24,7 @@ contract ERC721Drop is ERC721, IERC721Drop{
   // コントラクトの作成者
   address private _creator;
   // ベースURI
-  string private baseURI_ = 'https://ipfs.moralis.io:2053/ipfs/QmSn52GYhZUivbHDPYmzpsAFK54NKBxpdvBbWRXdnwCVwy/metadata/';
+  string private baseURI_;
 
   // 販売状態(列挙型)
   enum SaleState {PreRelease, FreeMint, Suspended} 
@@ -36,6 +36,7 @@ contract ERC721Drop is ERC721, IERC721Drop{
   mapping(address => bool) public whitelistClaimed;
 
   event NowOnSale(SaleState sales);
+  event Stock(uint256 _amount);
 
   constructor (
     string memory _name,
@@ -147,8 +148,8 @@ contract ERC721Drop is ERC721, IERC721Drop{
   * @param エージェントのアドレス
   * @dev 
   */
-  function license(address agentAddr) public virtual override onlyCreatorOrAgent {
-    _agent[agentAddr] = true;
+  function license(address _agentAddr) public virtual override onlyCreatorOrAgent {
+    _agent[_agentAddr] = true;
   }
 
   /*
@@ -157,8 +158,17 @@ contract ERC721Drop is ERC721, IERC721Drop{
   * @param エージェントのアドレス
   * @dev 
   */
-  function unlicense(address agentAddr) public virtual override onlyCreatorOrAgent {
-    _agent[agentAddr] = false;
+  function unlicense(address _agentAddr) public virtual override onlyCreatorOrAgent {
+    _agent[_agentAddr] = false;
+  }
+
+  /*
+  * @title inventoryReplenishment
+  * @dev 
+  */
+  function inventoryReplenishment(uint256 _amount) public virtual override onlyCreatorOrAgent {
+    MAX_AMOUNT_OF_MINT = _amount;
+    emit Stock(_amount);
   }
 
   /*
@@ -173,8 +183,8 @@ contract ERC721Drop is ERC721, IERC721Drop{
   * @title tokenURI
   * @dev 
   */
-  function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
-    require(_exists(tokenId), "ERC721URIStorage: URI query for nonexistent token");
-    return string(abi.encodePacked(baseURI_, Strings.toString(tokenId)));
+  function tokenURI(uint256 _tokenId) public view virtual override returns (string memory) {
+    require(_exists(_tokenId), "ERC721URIStorage: URI query for nonexistent token");
+    return string(abi.encodePacked(baseURI_, Strings.toString(_tokenId)));
   }
 }

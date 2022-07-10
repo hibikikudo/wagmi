@@ -105,7 +105,7 @@ const useStyles = makeStyles({
     }
 });
 
-const MintButtons = ({sales, checked}) => {
+const MintButtons = ({sales, checked, inStock}) => {
     const classes = useStyles();
 
     const [valid, setValid] = useState(false);
@@ -131,7 +131,7 @@ const MintButtons = ({sales, checked}) => {
         }
     }, [data]);
 
-    if(checked && valid && data){
+    if(checked && valid && data && inStock){
         /*
         *  sales == 0 => PreRelease
         *  sales == 1 => FreeMint
@@ -173,7 +173,7 @@ const MintButtons = ({sales, checked}) => {
     }
 }
 
-const MusicCard = ({artist = "hibikilla", title = "BAD MIND", sales}) => {
+const MusicCard = ({artist = "hibikilla", title = "BAD MIND", sales, valid, inStock}) => {
     const classes = useStyles();
     const { isPlaying, onPlay, onStop } = useContext(MusicContext);
 
@@ -220,7 +220,7 @@ const MusicCard = ({artist = "hibikilla", title = "BAD MIND", sales}) => {
                         <div className={classes.formContent}>I acknowledge that I have read and understood our policy prior to buying.</div>
                     </div>
                     <Spacer height={20}/>
-                    <MintButtons checked={checked} sales={sales}/>
+                    <MintButtons checked={checked} sales={sales} inStock={inStock}/>
                 </div>
             </Card>
 

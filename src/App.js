@@ -13,7 +13,7 @@ const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS;
 const maxSupply = process.env.REACT_APP_MAX_SUPPLY;
 
 const options = {
-  chain: "rinkeby",
+  chain: "0x1",
   address: contractAddress,
   function_name: "tokenSupply",
   abi: [{"inputs":[],"name":"tokenSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}],
@@ -32,6 +32,11 @@ const App = () => {
   const { isWeb3Enabled, enableWeb3, isAuthenticated, account, isWeb3EnableLoading } =
     useMoralis();
 
+  /*
+  *  sales == 0 => PreRelease
+  *  sales == 1 => FreeMint
+  *  sales == 2 => Suspended
+  */
   const [sales, setSeles] = useState();
   const [supply, setSupply] = useState(true);
   const { fetch, data, error, isLoading } = useMoralisWeb3ApiCall(native.runContractFunction,{...options});

@@ -1,14 +1,8 @@
-import { Button, Typography, Card, makeStyles, InputLabel, MenuItem, FormHelperText, FormControl, Select } from "@material-ui/core";
+import { Button, Typography, Card, makeStyles, InputLabel, MenuItem, FormControl, Select } from "@material-ui/core";
 import Header from "../components/Header";
 import Spacer from "../components/Spacer";
-import { faArrowsUpToLine } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from "react";
-import styled from 'styled-components';
-import { getChain, useMoralis } from "react-moralis";
-import { useMoralisWeb3Api, useMoralisWeb3ApiCall } from "react-moralis";
 import ConfirmButton from "../moralis/Confirm";
-import AllowListButton from "../moralis/AllowlistButton"
 
 // const StyledInputLabel = styled(InputLabel)`
 //   color: #030303;
@@ -209,7 +203,7 @@ const Jacket = ({tokenId}) => {
   return 
 }
 
-const AppPage = () => {
+const AppPage = ({sales}) => {
   const classes = useStyles();
   const [ ToETH, setToETH ] = useState();
   const [tokenId, setTokenId] = useState(1);
@@ -222,7 +216,7 @@ const AppPage = () => {
 
   return <>
   <div className={classes.back}>
-    <Header color="#030303" subColor="white"/>
+    <Header color="#030303" subColor="white" sales={sales}/>
         <Spacer height={150}></Spacer>
         {/* <AllowListButton/> */}
     <div className={classes.columnCenter}>

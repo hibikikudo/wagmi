@@ -1,4 +1,4 @@
-import { Grid, makeStyles, Typography } from "@material-ui/core";
+import { Grid, makeStyles } from "@material-ui/core";
 import AboutUs from "../components/AboutUs";
 import SalesInfo from "../components/SalesInfo";
 import Header from "../components/Header";

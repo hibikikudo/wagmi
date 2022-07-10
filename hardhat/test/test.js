@@ -6,7 +6,7 @@ const keccak256 = require("keccak256");
 const provider = waffle.provider;
 
 describe("main", () => {
-    let owner, alice, bob, WGMFactory721, WGM721, WGMFactory1155, WGM1155, 
+    let owner, alice, bob, WGMFactory721, WGM721, WGMFactory1155, WGM1155, WGMDropFactory721, WGM721Drop, 
     whitelistAddresses, tx, clamingAddress, hexPloof, leafNodes, merkleTree, rootHash, 
     ERC20
     beforeEach(async () => {
@@ -16,12 +16,17 @@ describe("main", () => {
 
         WGMFactory721 = await ethers.getContractFactory("ERC721Mock")
         WGMFactory1155 = await ethers.getContractFactory("ERC1155Mock")
+        WGMDropFactory721 = await ethers.getContractFactory("ERC721Drop")
 
         WGM721 = await WGMFactory721.deploy(
             "WAGMI Music",
             "disc"
         )
         WGM1155 = await WGMFactory1155.deploy(
+            "WAGMI Music",
+            "disc"
+        )
+        WGM721Drop = await WGMDropFactory721.deploy(
             "WAGMI Music",
             "disc"
         )
@@ -133,6 +138,20 @@ describe("main", () => {
                 console.log("ContractBalance",ethers.utils.formatEther(contractBalance))
                 console.log("balance",ethers.utils.formatEther(balance))
             })
+        })
+    })
+
+    describe("Normal method for ERC721Drop", () => {
+        beforeEach(async () => {
+            tx = await WGM721Drop.setMerkleRoot(rootHash);
+            await tx.wait();
+            hexPloof = merkleTree.getHexProof(keccak256(alice.address));
+            tx = await WGM721Drop.startFreeMint();
+        })
+        it("normal whitelist mint", async() => {
+            tx = await WGM721Drop.connect(alice).whitelistMint(hexPloof);
+                await tx.wait();
+            expect(await WGM721Drop.balanceOf(alice.address)).to.be.equal(1);
         })
     })
 

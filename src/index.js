@@ -13,7 +13,7 @@ const Application = () => {
   if (!APP_ID || !SERVER_URL)
     throw new Error(
       "Missing Moralis Application ID or Server URL. Make sure to set your .env file.",
-  );
+    );
   return (
     <MoralisProvider appId={APP_ID} serverUrl={SERVER_URL}>
       <App />

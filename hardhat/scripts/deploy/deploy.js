@@ -8,7 +8,7 @@ async function main() {
     gasPrice: 25 * 10**9
   }
   const contract = await factory.deploy(
-    "SnowCrash",
+    "WAGMI Music Drop",
     "disc"
   );
   await contract.deployed();

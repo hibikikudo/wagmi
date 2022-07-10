@@ -1,4 +1,4 @@
-import { Grid, makeStyles, Typography } from "@material-ui/core";
+import { Grid, makeStyles } from "@material-ui/core";
 import Header from "../components/Header";
 import Spacer from "../components/Spacer";
 import { useEffect, useState } from 'react'
@@ -68,7 +68,7 @@ const MintPage = ({sales, inStock, maxSupply, minted}) => {
     const classes = useStyles();
     return <div>
         <div className={classes.back}/>
-        <Header color="white" subColor="#030303"/>
+        <Header color="white" subColor="#030303" sales={sales}/>
         <div className={classes.columnCenter}>
             <Spacer height={750}/>
             <div className={classes.top} style={{opacity: opacity}}>
@@ -110,8 +110,8 @@ const MintPage = ({sales, inStock, maxSupply, minted}) => {
                 <Grid item>
                     {isAuthenticated && account
                     ?
-                    <MusicCard sales={sales} valid={true}/>
-                    :<MusicCard sales={sales} valid={false}/>}
+                    <MusicCard sales={sales} valid={true} inStock={inStock}/>
+                    :<MusicCard sales={sales} valid={false} inStock={inStock}/>}
                 </Grid>
             </div>
         </div>

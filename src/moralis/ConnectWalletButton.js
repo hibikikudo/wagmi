@@ -40,7 +40,7 @@ const ConnectWalletButton = ({color = '#333'}) => {
     const [address, setAddress] = useState();
 
   useEffect(() => {
-    if(chainId === "0x1" || chainId === "0x4" || chainId === "0x89" || chainId === null){
+    if(chainId === "0x1" || chainId === "0x89" || chainId === null){
     }else{
       alert("The system will change your network to Ethereum");
       switchNetwork("0x1");

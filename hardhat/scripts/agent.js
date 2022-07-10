@@ -4,11 +4,11 @@ dotenv.config(); // setup dotenv
 
 //this scripts is for mumbai Chain
 const { ethers } = require("hardhat");
-let srcAddr = process.env.CONTRACT_ADDRESS;
-let agentAddress = "AGENT_ADDRESS";
+let srcAddr = "0xa86a7046800c57236B61d1587f4aBE9B38Ab6F5d";
+let agentAddress = "0xAd84F848Efb88C7D2aC9e0e8181861a995041D71";
 
 async function main() {
-  const contractFactory = await ethers.getContractFactory("MusicNFT");
+  const contractFactory = await ethers.getContractFactory("ERC721Drop");
   const contract = await contractFactory.attach(srcAddr);
 
   let tx = await (await contract.license(agentAddress)).wait()
