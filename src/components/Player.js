@@ -81,39 +81,42 @@ const MusicTitle = () => {
         </div>
     }
 }
-const Player = () => {
+const Player = ({sales}) => {
     const classes = useStyles();
     const { isPlaying, onPlay, onStop } = useContext(MusicContext);
+    if(sales){
+        return <div>
+        <Card raised className={classes.card}>
+            <div className={isPlaying ? classes.playRecord : classes.stopRecord} >
+            {isPlaying ? 
+                <img width={120} height={120} src="/image/record_play.png" /> :
+                <img width={100} height={100} src="/image/record_stop.png" />
+            }
+            </div>
+            <div className={classes.transparentBlock}>
 
-    return <div>
-            <Card raised className={classes.card}>
-                <div className={isPlaying ? classes.playRecord : classes.stopRecord} >
-                {isPlaying ? 
-                    <img width={120} height={120} src="/image/record_play.png" /> :
-                    <img width={100} height={100} src="/image/record_stop.png" />
+            </div>
+            <div className={classes.animationText}>
+                <MusicTitle isPlaying={isPlaying}></MusicTitle>
+            </div>
+            <Button onClick={() => {
+                if (isPlaying) {
+                    onStop();
+                } else {
+                    onPlay();
                 }
-                </div>
-                <div className={classes.transparentBlock}>
-
-                </div>
-                <div className={classes.animationText}>
-                    <MusicTitle isPlaying={isPlaying}></MusicTitle>
-                </div>
-                <Button onClick={() => {
-                    if (isPlaying) {
-                        onStop();
-                    } else {
-                        onPlay();
-                    }
-                }}>
-                    {isPlaying ?
-                        <FontAwesomeIcon className={classes.icon} icon={faCirclePause} /> : 
-                        <FontAwesomeIcon className={classes.icon} icon={faCirclePlay} />
-                    }
-                </Button>
-            </Card>
-
+            }}>
+                {isPlaying ?
+                    <FontAwesomeIcon className={classes.icon} icon={faCirclePause} /> : 
+                    <FontAwesomeIcon className={classes.icon} icon={faCirclePlay} />
+                }
+            </Button>
+        </Card>
     </div>;
+    }else{
+        return;
+    }
+    
 };
 
 export default Player;

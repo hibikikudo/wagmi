@@ -199,8 +199,6 @@ const Jacket = ({tokenId}) => {
       src='/image/omni1.jpg'/>
       </div>
 }
-
-  return 
 }
 
 const AppPage = ({sales}) => {

@@ -127,7 +127,7 @@ const SalesInfo = ({sales, supply}) => {
             New Single will be released soon . . . !!
         </div>
         <Countdown
-            date={new Date('July 15, 2022 00:00:00')}
+            date={new Date('July 15, 2022 22:00:00')}
             renderer={renderer}
         >
         </Countdown>

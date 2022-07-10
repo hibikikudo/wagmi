@@ -87,8 +87,8 @@ const ConfirmButton = ({toETH, tokenId, update}) => {
     function_name: "balanceOf",
     abi: [{"inputs":[{"internalType":"address","name":"account","type":"address"},{"internalType":"uint256","name":"id","type":"uint256"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}],
     params: {
-      // account: account,
-      account: "0xaDAcbA4Cae9471C26D613F7A94014549a647783C",
+      account: account,
+      // account: "0xaDAcbA4Cae9471C26D613F7A94014549a647783C",
       id: tokenId
     }
   };

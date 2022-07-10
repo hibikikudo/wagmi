@@ -72,7 +72,7 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <MusicProvider>
           <div style={{position:'fixed', left: 30, bottom: 25, zIndex: 1}}> 
-            <Player />
+            <Player sales={sales}/>
           </div>
           <MyRoutes sales={sales} inStock={supply} maxSupply={maxSupply} minted={data}/>
         </MusicProvider>
