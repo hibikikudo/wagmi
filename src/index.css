@@ -1,19 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;300;700&family=Rock+Salt&display=swap');
 body {
   margin: 0;
-  font-family: 'Press Start 2P', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Rock Salt','Press Start 2P', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #030303;
 }
 
 code {
-  font-family: 'Press Start 2P', source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: 'Rock Salt','Press Start 2P', source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
 button {
-  font-family: 'Press Start 2P', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Rock Salt','Press Start 2P', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
 }
