@@ -6,9 +6,9 @@ const useStyles = makeStyles({
   }
 });
 
-const Spacer = ({height}) => {
+const Spacer = ({height, width}) => {
   const classes = useStyles();
-  return <div className={classes.spacer} style={{height: height}}></div>
+  return <div className={classes.spacer} style={{height: height, width:width}}></div>
 }
 
 export default Spacer;

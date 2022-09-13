@@ -1,6 +1,7 @@
 import { div, makeStyles, Typography, Button, Grid } from "@material-ui/core";
 import Countdown from "react-countdown";
 import { Path } from './Routes';
+import Spacer from "../components/Spacer";
 
 const useStyles = makeStyles({
     rowCenter: {
@@ -23,18 +24,18 @@ const useStyles = makeStyles({
         alignItems: 'center'
     },
     countCol: {
-        width: 120,
-        height: 140,
+        height: "auto",
+        width: "20%",
         margin: 10,
         display: 'flex',
         justifyContent: 'center',
         flexDirection: 'column',
         alignItems: 'center',
         backgroundColor: '#030303',
-        boxShadow: '0px 2px 5px 0px rgba(0, 0, 0, 0.8)',
-        borderRadius: "15%",
-        fontSize: 30,
+        // boxShadow: '0px 2px 5px 0px rgba(0, 0, 0, 0.8)',
+        borderRadius: "1vw",
         color: '#F2EBE4',
+        zIndex:2
     },
     colon: {
         display: 'flex',
@@ -46,33 +47,36 @@ const useStyles = makeStyles({
         fontFamily: 'Lato',
     },
     number: {
-        fontSize: 60,
-        fontFamily: 'Lato',
+        fontSize: "200%",
+        fontFamily: 'Black',
+        marginTop:"10%",
     },
     unit: {
-        fontSize: 20,
-        fontFamily: 'Lato',
-        fontWeight: 'bold'
+        fontSize: "80%",
+        fontFamily: 'Light',
+        marginBottom:"15%",
+        marginLeft:"4vw",
+        marginRight:"4vw",
     },
     description: {
         fontWeight:'bold',
-        marginLeft:20,
+        marginLeft:30,
     },
     buttonMargin: {
-        margin: 10,
+        margin: "20px 80px 20px 80px",
         "box-sizing": "border-box"
     },
     customButton: {
         height: 60,
         width: 200,
-        fontSize: 24,
-        fontFamily: 'Lato',
-        fontWeight: 'bold',
-        backgroundColor: '#4911BF',
+        fontFamily: "Black",
+        fontSize: 16,
+        borderRadius: 30,
+        backgroundColor: 'black',
         color: 'white',
         "box-sizing": "border-box",
         "&:hover": {
-            background: "#4911BF"
+            background: 'black'
           },
     },
     incite: {
@@ -85,7 +89,14 @@ const useStyles = makeStyles({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
-      },
+    },
+    fix:{
+        position:"fixed",
+    },
+    div: {
+        textShadow: '0px 0px 2px  rgba(0, 0, 0, 1)',
+        color: "white",
+    },
 });
 const Time = ({days, hours, minutes, seconds}) => {
     const classes = useStyles();
@@ -115,26 +126,31 @@ const renderer = ({ days, hours, minutes, seconds, completed }) => {
 };
 
 /*
-*  sales == 0 => PreRelease
-*  sales == 1 => FreeMint
-*  sales == 2 => Suspended
+*  sales == 0 => prepared
+*  sales == 1 => presale
+*  sales == 2 => pulicsale
+*  sales == 3 => suspended
 */
-const SalesInfo = ({sales, supply}) => {
+const SalesInfo = ({sales="0", supply}) => {
     const classes = useStyles();
-    if(!sales){
-        return <div>
-        <div className={classes.description}>
-            New Single will be released soon . . . !!
-        </div>
-        <Countdown
-            date={new Date('July 15, 2022 22:00:00')}
-            renderer={renderer}
-        >
-        </Countdown>
-        </div>;
-    } else if(supply === true && sales === 1){
+    if(sales === "3"){
         return <div className={classes.columnCenter}>
-        <div className={classes.incite}>
+        <div className={classes.div}>
+        Mint sale is over !!
+        </div>
+        <Grid item className={classes.buttonMargin}>
+            <Button 
+                href="https://opensea.io/collection/wagmimusic"
+                target="_blank"
+                className={classes.customButton}
+                >
+                Go OpenSea
+            </Button>
+        </Grid>
+        </div>;
+    } else if(sales === "1" || sales === "2"){
+        return <div className={classes.columnCenter}>
+        <div className={classes.div}>
         Mint is now available !!
         </div>
         <Grid item className={classes.buttonMargin}>
@@ -148,18 +164,15 @@ const SalesInfo = ({sales, supply}) => {
         </div>;
     } else {
         return <div className={classes.columnCenter}>
-        <div className={classes.incite}>
-        Mint sale is finished !!
+        <div className={classes.div}>
+            New Single will be released soon . . . !!
         </div>
-        <Grid item className={classes.buttonMargin}>
-            <Button 
-                href="https://opensea.io/collection/wagmimusic"
-                target="_blank"
-                className={classes.customButton}
-                >
-                Go Opensea
-            </Button>
-        </Grid>
+        <Spacer height={10}/>
+        <Countdown
+            date={new Date('September 19, 2022 21:00:00')}
+            renderer={renderer}
+        >
+        </Countdown>
         </div>;
     };
 };

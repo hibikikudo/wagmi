@@ -1,21 +1,69 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;300;700&family=Rock+Salt&display=swap');
+
+@font-face {
+  font-family: 'Regular';
+  src: url('../font/Muller/Non-commercial/Muller/OTF/Muller-Trial-Regular.otf') format('opentype');
+  }
+
+@font-face {
+  font-family: 'ExtraBold';
+  src: url('../font/Muller/Non-commercial/Muller/OTF/Muller-Trial-ExtraBold.otf') format('opentype');
+  }
+
+@font-face {
+  font-family: 'IExtraBold';
+  src: url('../font/Muller/Non-commercial/Muller/OTF/Muller-Trial-ExtraBoldItalic.otf') format('opentype');
+  }
+
+@font-face {
+  font-family: 'Medium';
+  src: url('../font/Muller/Non-commercial/Muller/OTF/Muller-Trial-Medium.otf') format('opentype');
+  }
+
+@font-face {
+  font-family: 'Black';
+  src: url('../font/Muller/Non-commercial/Muller/OTF/Muller-Trial-Black.otf') format('opentype');
+  }
+
+@font-face {
+  font-family: 'Heavy';
+  src: url('../font/Muller/Non-commercial/Muller/OTF/Muller-Trial-Heavy.otf') format('opentype');
+  }
+
+
+
+@font-face {
+  font-family: 'Light';
+  src: url('../font/Muller/Non-commercial/Muller/OTF/Muller-Trial-Light.otf') format('opentype');
+  }
+
+@font-face {
+  font-family: 'Thin';
+  src: url('../font/Muller/Non-commercial/Muller/OTF/Muller-Trial-Thin.otf') format('opentype');
+  }
+
+@font-face {
+  font-family: 'Fat';
+  src: url('../font/Muller/Non-commercial/Muller/OTF/Muller-Trial-Fat.otf') format('opentype');
+  }
+
 body {
   margin: 0;
-  font-family: 'Rock Salt','Press Start 2P', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'ExtraBold', -apple-system, BlinkMacSystemFont, 'Rock Salt', 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #030303;
+  background-color: #151515;
 }
 
 code {
-  font-family: 'Rock Salt','Press Start 2P', source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: 'ExtraBold', source-code-pro, Menlo, Monaco, Consolas, 'Rock Salt', 'Courier New',
     monospace;
 }
 
 button {
-  font-family: 'Rock Salt','Press Start 2P', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'ExtraBold', -apple-system, BlinkMacSystemFont,'Rock Salt', 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
 }

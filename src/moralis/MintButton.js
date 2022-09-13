@@ -5,6 +5,8 @@ import { Buffer } from 'buffer';
 import styled from 'styled-components';
 import { MerkleTree } from 'merkletreejs';
 import Spacer from "../components/Spacer";
+import { getEllipsisTxt } from "../helpers/formatters";
+import { faHandPointLeft } from "@fortawesome/free-solid-svg-icons";
 
 const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS;
 
@@ -51,46 +53,77 @@ const useStyles = makeStyles({
 const Error = ({error}) => {
   if(error){
     if(error.data){
+      console.log(error)
       return <div style={{color:'red', fontWeight:'bold'}}>
-      {error.data.message}
+      {getEllipsisTxt(error.data.message, 80, 0)}
       <Spacer height={20}/>
       </div>
     }
+    console.log(error)
+    console.log(error.message)
     return <div style={{color:'red', fontWeight:'bold'}}>
-    {error.message}
+    {getEllipsisTxt(error.message, 80, 0)}
     <Spacer height={20}/>
     </div>
   }
 }
 
-const WLMintButton = (data) => {
+const MintButton = ({tokenId, fee}) => {
+  const options = {
+    contractAddress: contractAddress,
+    functionName:"omniMint",
+    abi:[{"inputs":[{"internalType":"uint256","name":"_tokenId","type":"uint256"},{"internalType":"uint32","name":"_amount","type":"uint32"},{"internalType":"bytes","name":"_data","type":"bytes"},{"internalType":"bytes32[]","name":"_merkleProof","type":"bytes32[]"}],"name":"omniMint","outputs":[],"stateMutability":"payable","type":"function"}],
+    params:{
+      _tokenId: tokenId,
+      _amount:1,
+      _data:"0x00",
+      _merkleProof:[]
+    },
+    msgValue: fee
+  };
 
   const classes = useStyles();
+  const { fetch, error } = useWeb3ExecuteFunction(options);
+  return (
+    <div className={classes.columnCenter}>
+      <Error error={error}/>
+      <Button className={classes.button} onClick={fetch}>Mint</Button>
+    </div>)
+}
 
+const WLMintButton = ({data, tokenId, fee}) => {
+
+  const classes = useStyles();
   const { account } = useMoralis();
 
   const getHexPloof = (data) => {
-    let leafNodes, merkleTree, clamingHashedAddress, hexPloof;
+    let leafNodes, merkleTree, clamingHashedAddress;
 
     leafNodes = data.map(addr => keccak256(addr));
     merkleTree = new MerkleTree(leafNodes, keccak256, { sortPairs: true});
-    // console.log(merkleTree.toString());
-    // console.log(keccak256(account));
+    console.log(merkleTree.toString());
+    console.log(keccak256(account));
     clamingHashedAddress = keccak256(account);
-    return hexPloof = merkleTree.getHexProof(clamingHashedAddress);
+    return merkleTree.getHexProof(clamingHashedAddress);
   }
 
-  const hexPloof = getHexPloof(data.data[data.data.length-1].attributes.allowlist);
+  console.log("kore",data);
+  const hexPloof = getHexPloof(data[data.length-1].attributes.allowlist);
   // console.log('merklePloof\n',hexPloof);
 
   const options = {
     contractAddress: contractAddress,
-    functionName:"whitelistMint",
-    abi:[{"inputs":[{"internalType":"bytes32[]","name":"_merkleProof","type":"bytes32[]"}],"name":"whitelistMint","outputs":[],"stateMutability":"nonpayable","type":"function"}],
+    functionName:"omniMint",
+    abi:[{"inputs":[{"internalType":"uint256","name":"_tokenId","type":"uint256"},{"internalType":"uint32","name":"_amount","type":"uint32"},{"internalType":"bytes","name":"_data","type":"bytes"},{"internalType":"bytes32[]","name":"_merkleProof","type":"bytes32[]"}],"name":"omniMint","outputs":[],"stateMutability":"payable","type":"function"}],
     params:{
-      _merkleProof: hexPloof
-    }
+      _tokenId: tokenId,
+      _amount:1,
+      _data:"0x00",
+      _merkleProof:hexPloof?hexPloof:[]
+    },
+    msgValue: fee
   };
+
   const { fetch, error } = useWeb3ExecuteFunction(options);
 
   if(hexPloof){
@@ -106,4 +139,4 @@ const WLMintButton = (data) => {
   }
   
 }
-export default WLMintButton;
+export {MintButton, WLMintButton};

@@ -89,7 +89,11 @@ const SendButton = ({address, tokenId, toETH, fee}) => {
 
   useEffect(() => {
     if(error){
-      alert(error)
+      if(error.message){
+        alert(error.message)
+      }else{
+        alert(error)
+      }
     }
   }, [error])
 
