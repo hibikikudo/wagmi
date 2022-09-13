@@ -2,27 +2,44 @@ import useSound from "use-sound";
 import { Button, Card, Grid, Hidden, makeStyles } from "@material-ui/core";
 import { useContext, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCirclePause, faCirclePlay } from "@fortawesome/free-solid-svg-icons";
+import { faPause, faPlay } from "@fortawesome/free-solid-svg-icons";
 import { getEllipsisTxt } from "../helpers/formatters";
 import { MusicContext } from "../provider/MusicProvider";
+import zIndex from "@material-ui/core/styles/zIndex";
+import Spacer from "./Spacer";
 
 const useStyles = makeStyles({
     card: {
-        height: 70,
-        width: 400,
-        borderRadius: 10,
-        backgroundColor: '#2F2C37',
+        height: 60,
+        width: "auto",
+        borderRadius: 30,
+        backgroundColor: 'black',
         color: 'white',
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'start',
         alignItems: 'center',
         paddingLeft: 5,
-        paddingRight: 5
+        paddingRight: 5,
+        zIndex:100,
+    },
+    circle: {
+        maxWidth: 50,
+        maxHeight: 60,
+        minWidth: 50,
+        minHeight: 60,
+        borderRadius: 30,
+        backgroundColor: 'black',
+        color: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        paddingLeft: 5,
+        paddingRight: 5,
+        zIndex:100,
     },
     playRecord: {
-        width: 120,
-        height: 120,
+        width: 100,
+        height: 100,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -30,8 +47,8 @@ const useStyles = makeStyles({
         transform: 'translateY(-10%)'
     },
     stopRecord: {
-        width: 120,
-        height: 120,
+        width: 100,
+        height: 100,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -43,11 +60,11 @@ const useStyles = makeStyles({
         //backgroundColor: 'red'
     },
     icon: {
-        fontSize: 40,
+        fontSize: 20,
         color: 'white'
     },
     animationText: {
-        width:'50%',
+        marginRight:20,
         fontFamily:'Lato',
         fontWeight:'bold',
         overflow: 'hidden'
@@ -68,55 +85,70 @@ const useStyles = makeStyles({
 });
 
 const MusicTitle = () => {
-    const { isPlaying, title } = useContext(MusicContext);
+    const { musicPlaying, handleTitle } = useContext(MusicContext);
     const classes = useStyles();
 
-    if(isPlaying){
+    if(musicPlaying){
         return <div className={classes.playingMusicDisc}>
-            {title}
+            {handleTitle(musicPlaying)}
         </div>
     }else{
         return <div className={classes.notPlayingMusicDisc}>
-            {getEllipsisTxt(title, 25, 0)}
+            {getEllipsisTxt(handleTitle(musicPlaying), 30, 0)}
         </div>
     }
 }
 const Player = ({sales}) => {
     const classes = useStyles();
-    const { isPlaying, onPlay, onStop } = useContext(MusicContext);
-    if(sales){
+    const { musicPlaying, onPlay, onStop } = useContext(MusicContext);
+    if(sales==="0"||!sales){
+        return<div></div>
+    }
+    if(musicPlaying){
+        return <div>
+        <Card raised className={classes.circle}>
+            {/* <div className={classes.animationText}>
+                <MusicTitle musicPlaying={musicPlaying}></MusicTitle>
+            </div> */}
+            <Button className={classes.circle} onClick={() => {
+                if (musicPlaying) {
+                    onStop();
+                } else {
+                    onPlay(1);
+                }
+            }}>
+                <img width={60} height={60} src="/image/giphy.gif" /> 
+            </Button>
+        </Card>
+        </div>;
+    }else{
         return <div>
         <Card raised className={classes.card}>
-            <div className={isPlaying ? classes.playRecord : classes.stopRecord} >
-            {isPlaying ? 
-                <img width={120} height={120} src="/image/record_play.png" /> :
-                <img width={100} height={100} src="/image/record_stop.png" />
+            {/* <div className={musicPlaying ? classes.playRecord : classes.stopRecord} >
+            {musicPlaying ? 
+                <img width={60} height={60} src="/image/record_play.png" /> :
+                <img width={60} height={60} src="/image/record_stop.png" />
             }
             </div>
             <div className={classes.transparentBlock}>
-
-            </div>
-            <div className={classes.animationText}>
-                <MusicTitle isPlaying={isPlaying}></MusicTitle>
-            </div>
-            <Button onClick={() => {
-                if (isPlaying) {
+    
+            </div> */}
+            
+            <Button className={classes.circle} onClick={() => {
+                if (musicPlaying) {
                     onStop();
                 } else {
-                    onPlay();
+                    onPlay(1);
                 }
             }}>
-                {isPlaying ?
-                    <FontAwesomeIcon className={classes.icon} icon={faCirclePause} /> : 
-                    <FontAwesomeIcon className={classes.icon} icon={faCirclePlay} />
-                }
+                <FontAwesomeIcon className={classes.icon} icon={faPlay} />
             </Button>
+            <div className={classes.animationText}>
+                <MusicTitle musicPlaying={musicPlaying}></MusicTitle>
+            </div>
         </Card>
-    </div>;
-    }else{
-        return;
+        </div>;
     }
-    
 };
 
 export default Player;

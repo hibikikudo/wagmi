@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import styled from 'styled-components';
 import Spacer from "../components/Spacer";
 import { EstGasExtension } from "../moralis/SendButton";
+import ExchangeButton from "./ExchangeButton";
 
 const StyledCircularProgress = styled(CircularProgress)`
   color: #333;
@@ -14,13 +15,13 @@ const useStyles = makeStyles({
   send: {
     height: 50, 
     width: 120, 
-    color: '#030303',
+    color: 'white',
     fontFamily: 'Lato',
     fontWeight: 'bold',
     fontSize: 20,
-    backgroundColor:'#F4BF1A',
+    backgroundColor:'#7547D7',
     "&:hover": {
-      background: "#B58B07"
+      background: "#4911BF"
     },
     // "&:active": {
     //   background: "aqua"
@@ -29,7 +30,8 @@ const useStyles = makeStyles({
   load: {
     height: 50, 
     width: 120, 
-    backgroundColor:'#F4BF1A',
+    backgroundColor:'#7547D7',
+    color: 'white',
     borderRadius:5,
     display: 'flex',
     justifyContent: 'center',
@@ -53,9 +55,88 @@ const Error = ({error, data}) => {
   }
   if(data==="0"){
     return <div style={{color:'red', fontWeight:'bold'}}>
-    It seems you have no token to send!
+    It seems you have no token to execute!
     <Spacer height={20}/>
     </div>
+  }
+}
+
+const ConfirmExchangeButton = ({tokenId, update}) => {
+
+  const classes = useStyles();
+
+  const [ Confirmed, setConfirmed ] = useState(false);
+
+  const { native } = useMoralisWeb3Api();
+
+  const { authenticate, isAuthenticated, account, chainId } = useMoralis();
+  const { switchNetwork } = useChain();
+
+  const options = {
+    chain: chainId,
+    address: "0x2953399124F0cBB46d2CbACD8A89cF0599974963",
+    function_name: "balanceOf",
+    abi: [{"inputs":[{"internalType":"address","name":"account","type":"address"},{"internalType":"uint256","name":"id","type":"uint256"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}],
+    params: {
+      // account: account,
+      account: "0xF10F87D0885F846EEfdfeCD99d31e1EA21f8608F",
+      id: tokenId
+    }
+  };
+
+  const { fetch, data, error, isLoading, isFetching, setData } = useMoralisWeb3ApiCall(native.runContractFunction,{...options});
+
+  useEffect(()=>{
+    console.log("balance of token",data);
+    if(data>=1){
+      setConfirmed(true);
+    }
+  },[data])
+
+  useEffect(() => {
+    setConfirmed(false);
+    setData(null);
+  }, [update])
+
+  const Confirm = async() => {
+    if(!isAuthenticated || !account){
+      alert("Please connect wallet!");
+      await authenticate({signingMessage: "Log in using Moralis"})
+      .then((user) => {
+        console.log("logged in user:", user);
+        if (user) {
+          console.log(user.get("ethAddress"));
+        } else {
+            console.log('no user');
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+
+    if(chainId === "0x89" && account && isAuthenticated){
+      // Fetch balanceOf
+      fetch();
+    }else{
+      alert("The system will change your network to Polygon.");
+      switchNetwork("0x89");
+    }
+  }
+
+  if(isLoading||isFetching){
+    return <div className={classes.load}>
+      <StyledCircularProgress style={{width:25, height:25, color:'white'}}/>
+    </div>
+  }else{
+    if(Confirmed){
+      return <ExchangeButton/>;
+    }else{
+      return <div className={classes.columnCenter}>
+        <Error error={error} data={data}/>
+        <Button className={classes.send} onClick={Confirm}>Confirm</Button>
+      </div>
+    }
   }
 }
 
@@ -68,7 +149,7 @@ const ConfirmButton = ({toETH, tokenId, update}) => {
 
   const { native } = useMoralisWeb3Api();
 
-  const { isAuthenticated, account, chainId } = useMoralis();
+  const { authenticate, isAuthenticated, account, chainId } = useMoralis();
   const { switchNetwork } = useChain();
 
   const getContractAddress = () => {
@@ -88,7 +169,7 @@ const ConfirmButton = ({toETH, tokenId, update}) => {
     abi: [{"inputs":[{"internalType":"address","name":"account","type":"address"},{"internalType":"uint256","name":"id","type":"uint256"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}],
     params: {
       account: account,
-      // account: "0xaDAcbA4Cae9471C26D613F7A94014549a647783C",
+      // account: "0xF10F87D0885F846EEfdfeCD99d31e1EA21f8608F",
       id: tokenId
     }
   };
@@ -96,7 +177,7 @@ const ConfirmButton = ({toETH, tokenId, update}) => {
   const { fetch, data, error, isLoading, isFetching, setData } = useMoralisWeb3ApiCall(native.runContractFunction,{...options});
 
   useEffect(()=>{
-    // console.log("balance of token",data);
+    console.log("balance of token",data);
     if(data>=1){
       setConfirmed(true);
     }
@@ -108,7 +189,24 @@ const ConfirmButton = ({toETH, tokenId, update}) => {
     setToETH(toETH);
   }, [update, toETH])
 
-  const Confirm = () => {
+  const Confirm = async() => {
+
+    if(!isAuthenticated || !account){
+      alert("Please connect wallet!");
+      await authenticate({signingMessage: "Log in using Moralis"})
+      .then((user) => {
+        console.log("logged in user:", user);
+        if (user) {
+          console.log(user.get("ethAddress"));
+        } else {
+            console.log('no user');
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+    
     if(ToETH){
       if(chainId === "0x89" && account && isAuthenticated){
         // Fetch balanceOf
@@ -130,7 +228,7 @@ const ConfirmButton = ({toETH, tokenId, update}) => {
 
   if(isLoading||isFetching){
     return <div className={classes.load}>
-      <StyledCircularProgress style={{width:25, height:25}}/>
+      <StyledCircularProgress style={{width:25, height:25, color:'white'}}/>
     </div>
   }else{
     if(Confirmed){
@@ -144,5 +242,4 @@ const ConfirmButton = ({toETH, tokenId, update}) => {
   }
 }
 
-
-export default ConfirmButton;
+export {ConfirmButton, ConfirmExchangeButton}
